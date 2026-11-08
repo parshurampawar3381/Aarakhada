@@ -783,7 +783,7 @@ function buildVillageSheetSpec(v, wage) {
   reqs.push(styleReq(E, 'A4:AA6', { bold: true, bg: CYAN, h: 'CENTER', v: 'MIDDLE', wrap: true, size: 12 }));
   reqs.push(rowHeightReq(E, 4, 4, 30), rowHeightReq(E, 5, 5, 30), rowHeightReq(E, 6, 6, 60));
 
-  const widths = { A:10,B:14,C:16,D:22,E:26,F:14,G:13,H:11,I:12,J:13,K:11,L:16,M:20,N:22,O:11,P:14,Q:13,R:11,S:12,T:13,U:11,V:11,W:13,X:11,Y:12,Z:13,AA:13 };
+  const widths = { A:10,B:14,C:16,D:22,E:26,F:14,G:14,H:14,I:14,J:14,K:14,L:16,M:20,N:22,O:14,P:14,Q:14,R:14,S:14,T:14,U:14,V:14,W:14,X:14,Y:14,Z:14,AA:14 };
   Object.keys(widths).forEach(c => reqs.push(colWidthReq(E, colIdx(c), colIdx(c), px(widths[c]))));
 
   // डेटा-ओळींची सूत्रे (A, V..AA)
@@ -845,7 +845,7 @@ function buildVillageSheetSpec(v, wage) {
   put(A_SHEET, 'AA6:AC6', [['कुटूंब संख्या', 'मनुष्य दिन', 'मुल्य (₹)']]);
   reqs.push(styleReq(S, 'A4:AC6', { bold: true, size: 12, bg: CYAN, h: 'CENTER', v: 'MIDDLE', wrap: true }));
   reqs.push(borderReq(S, 'A4:AC6', '#000000'));
-  reqs.push(rowHeightReq(S, 4, 6, 26));
+  reqs.push(rowHeightReq(S, 4, 5, 28), rowHeightReq(S, 6, 6, 48));
 
   const FIRST_A = FIRST_A_DATA_ROW, LAST_A = FIRST_A_DATA_ROW + 3;
   const totalRef = q1(VILLAGE_INFO_SHEET) + '!$B$' + VILLAGE_INFO_ROW.kutumbTotal;
@@ -888,7 +888,10 @@ function buildVillageSheetSpec(v, wage) {
   for (let c = 3; c <= 29; c++) { const L = colLet(c); totRow.push('=SUM(' + L + FIRST_A + ':' + L + LAST_A + ')'); }
   put(A_SHEET, 'C' + totalRow + ':AC' + totalRow, [totRow]);
   reqs.push(styleReq(S, 'A' + totalRow + ':AC' + totalRow, { bold: true }));
-  reqs.push(colWidthReq(S, 1, 1, px(8)), colWidthReq(S, 2, 2, px(20)), colWidthReq(S, 3, 29, 60));
+  reqs.push(colWidthReq(S, 1, 1, px(8)), colWidthReq(S, 2, 2, px(20)));
+  // (v9.2) महिन्याचे स्तंभ: कुटूंब संख्या = रुंद, मनुष्य दिन (दशांशासह) = आणखी रुंद; शेवटचे ३ स्तंभ मोठ्या रकमांसाठी रुंद
+  MONTHS.forEach(m => { const c = monthCols[m]; reqs.push(colWidthReq(S, c, c, 100), colWidthReq(S, c + 1, c + 1, 110)); });
+  reqs.push(colWidthReq(S, 27, 27, 105), colWidthReq(S, 28, 28, 120), colWidthReq(S, 29, 29, 130));
   reqs.push(freezeReq(S, 6));
 
   return { reqs, data };
@@ -1175,7 +1178,7 @@ async function signOutUser() {
 const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbzdcxKVDkdfrorO0_f88kSNZq4VcCZ8AUN2ejeFs2shQKugG6oWwE7NvQ_2U9fqBat8Sg/exec';
 // GS फाईलमधल्या SCRIPT_VERSION शी जुळणारा आकडा — जुळत नसेल तर विकसकाने कोड बदलल्यानंतर
 // "Deploy → Manage deployments → New version → Deploy" द्यायचं राहिलं आहे असं समजायचं
-const EXPECTED_SCRIPT_VERSION = 9;
+const EXPECTED_SCRIPT_VERSION = 10;
 let versionMismatchWarned = false;
 let GS_URL = DEFAULT_GS_URL;
 
@@ -1338,7 +1341,7 @@ async function checkVillageAccess(jilha, taluka, gav, password) {
     const res = await fetch(GS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'villageAccess', village: { jilha, taluka, gav }, password, adminPassword: currentAdminPassword })
+      body: JSON.stringify({ action: 'villageAccess', village: { jilha, taluka, gav }, password, adminPassword: currentAdminPassword, email: Auth.getEmail() })
     });
     const data = await res.json();
     if (!data.ok) return { granted: false, error: data.error || 'तपासणी अयशस्वी' };
