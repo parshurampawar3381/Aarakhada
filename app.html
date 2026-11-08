@@ -1,0 +1,2861 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#14532d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="समृद्धी बजेट">
+<title>समृद्धी लेबर बजेट — काम नोंदणी (VB–GRAMG)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+  :root {
+    --green-900:#0b3d24; --green-700:#14532d; --green-600:#1f7a45; --green-500:#2e7d32;
+    --green-100:#e3f2e7; --green-50:#f3f9f4; --amber-600:#b7660b; --amber-500:#e08e2b;
+    --amber-100:#fdf0dd; --ink-900:#1c2320; --ink-700:#3d453f; --ink-500:#6b736c;
+    --ink-300:#a6ada4; --paper:#fbfaf6; --card:#ffffff; --line:#e3e1d6;
+    --red-600:#b3261e; --red-100:#fbe9e7; --radius:10px;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans Devanagari','Noto Sans',sans-serif; background:var(--paper); color:var(--ink-900); min-height:100vh; }
+  .topbar { background:linear-gradient(180deg,var(--green-700),var(--green-900)); color:#fff; padding:22px 28px 46px; text-align:center; }
+  .topbar h1 { margin:0; font-size:21px; font-weight:700; letter-spacing:.2px; }
+  .topbar p { margin:6px 0 0; font-size:13px; color:#cfe6d6; }
+  .gpbadge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); border-radius:20px; padding:6px 12px; margin-top:12px; font-size:12.5px; }
+  .navrow { display:flex; justify-content:center; gap:10px; margin-top:14px; }
+  .navbtn { background:rgba(255,255,255,.16); color:#fff; border:1.5px solid rgba(255,255,255,.35); border-radius:9px; padding:8px 16px; font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .navbtn:hover { background:rgba(255,255,255,.28); }
+  .navbtn-exit:hover { background:#dc2626; border-color:#dc2626; }
+  .gpbadge b { font-weight:700; }
+  .gpbadge button { background:none; border:none; color:#cfe6d6; text-decoration:underline; font-size:12px; cursor:pointer; font-family:inherit; padding:0; }
+  .wrap { max-width:760px; margin:-30px auto 60px; padding:0 18px; }
+  .statrow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+  .stat { background:var(--card); border-radius:var(--radius); padding:14px 16px; border:1px solid var(--line); box-shadow:0 1px 2px rgba(0,0,0,.03); }
+  .stat .n { font-size:22px; font-weight:700; color:var(--green-700); }
+  .stat .l { font-size:12px; color:var(--ink-500); margin-top:2px; }
+  .tabs { display:flex; gap:7px; background:var(--card); border-radius:var(--radius); padding:6px; border:1px solid var(--line); margin-bottom:16px; flex-wrap:wrap; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+  .tab { flex:1 1 18%; text-align:center; padding:12px 6px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:800; user-select:none; transition:background .15s,color .15s,transform .1s; border:1.5px solid transparent; }
+  .tab:active { transform:scale(0.97); }
+  .tab:nth-child(1) { color:#166534; background:#e9f7ee; }
+  .tab:nth-child(1).active { background:#16a34a; color:#fff; border-color:#15803d; box-shadow:0 3px 10px rgba(22,163,74,.35); }
+  .tab:nth-child(2) { color:#1d4ed8; background:#eaf1ff; }
+  .tab:nth-child(2).active { background:#2563eb; color:#fff; border-color:#1d4ed8; box-shadow:0 3px 10px rgba(37,99,235,.35); }
+  .tab:nth-child(3) { color:#7e22ce; background:#f5ecfe; }
+  .tab:nth-child(3).active { background:#9333ea; color:#fff; border-color:#7e22ce; box-shadow:0 3px 10px rgba(147,51,234,.35); }
+  .tab:nth-child(4) { color:#b45309; background:#fef3e2; }
+  .tab:nth-child(4).active { background:#d97706; color:#fff; border-color:#b45309; box-shadow:0 3px 10px rgba(217,119,6,.35); }
+  .tab:nth-child(5) { color:#0f766e; background:#e6f7f5; }
+  .tab:nth-child(5).active { background:#0d9488; color:#fff; border-color:#0f766e; box-shadow:0 3px 10px rgba(13,148,136,.35); }
+  .tab:nth-child(6) { color:#be123c; background:#fdecef; }
+  .tab:nth-child(6).active { background:#e11d48; color:#fff; border-color:#be123c; box-shadow:0 3px 10px rgba(225,29,72,.35); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; box-shadow:0 1px 3px rgba(0,0,0,.04); margin-bottom:18px; }
+  .card h2 { margin:0 0 4px; font-size:17px; font-weight:700; color:var(--green-900); }
+  .card .sub { font-size:12.5px; color:var(--ink-500); margin:0 0 18px; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13px; font-weight:600; color:var(--ink-700); margin-bottom:6px; }
+  .field .hint { font-size:11.5px; color:var(--ink-300); font-weight:400; margin-left:4px; }
+  .browserLinkBtn { color:#6b736c; font-size:12px; text-decoration:underline; cursor:pointer; background:none; border:none; font-family:inherit; padding:0; }
+  #browserModalOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999; align-items:center; justify-content:center; padding:20px; }
+  #browserModalOverlay.show { display:flex; }
+  .browserModalBox { background:#fff; border-radius:14px; padding:22px; max-width:420px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.25); }
+  .browserModalBox h3 { margin:0 0 8px; font-size:17px; }
+  .browserModalBox p.sub { margin:0 0 14px; font-size:13px; color:var(--ink-300); }
+  .browserModalBox input[type=text] { width:100%; box-sizing:border-box; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:12.5px; margin-bottom:12px; }
+  .browserModalBox .btnrow { display:flex; flex-wrap:wrap; gap:8px; }
+  .browserModalBox .btnrow a, .browserModalBox .btnrow button { flex:1 1 auto; text-align:center; text-decoration:none; }
+  .browserModalBox .closeRow { text-align:right; margin-top:14px; }
+  select, input[type=text], input[type=number] {
+    width:100%; padding:11px 12px; border-radius:8px; border:1.5px solid var(--line);
+    font-size:14.5px; font-family:inherit; background:#fff; color:var(--ink-900);
+    appearance:none; -webkit-appearance:none;
+  }
+  select { background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%236b736c' stroke-width='1.6' fill='none'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:34px; }
+  select:disabled, input:disabled { background:#f2f1ea; color:var(--ink-300); }
+  select:focus, input:focus { outline:none; border-color:var(--green-500); box-shadow:0 0 0 3px var(--green-100); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .qtyrow { display:grid; grid-template-columns:1fr 90px; gap:10px; align-items:end; }
+  .unitbox { padding:11px 10px; border-radius:8px; border:1.5px solid var(--line); background:#f2f1ea; color:var(--ink-700); font-weight:700; text-align:center; font-size:14px; }
+  .summary { background:var(--green-50); border:1px dashed var(--green-500); border-radius:10px; padding:14px 16px; margin:6px 0 18px; }
+  .summary .st { font-size:11.5px; color:var(--green-700); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px; }
+  .sgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px 8px; }
+  .schip { text-align:center; }
+  .schip .v { font-size:15px; font-weight:700; color:var(--green-900); }
+  .schip .k { font-size:10.5px; color:var(--ink-500); margin-top:2px; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 22px; border-radius:11px; border:none; font-size:16px; font-weight:800; letter-spacing:.2px; cursor:pointer; font-family:inherit; width:100%; transition:transform .12s ease, box-shadow .12s ease, background .15s ease; }
+  .btn:active { transform:scale(0.98); }
+  .btn-primary { background:linear-gradient(135deg,var(--green-600),var(--green-700)); color:#fff; box-shadow:0 4px 14px rgba(22,101,52,.28); }
+  .btn-primary:hover { background:linear-gradient(135deg,var(--green-700),var(--green-900)); box-shadow:0 6px 18px rgba(22,101,52,.35); }
+  .btn-secondary { background:linear-gradient(135deg,var(--amber-100),#fde8c8); color:var(--amber-600); box-shadow:0 3px 10px rgba(217,119,6,.15); }
+  .btn-secondary:hover { background:#fbe3bc; }
+  .btn-ghost { background:#fff; color:var(--ink-700); border:2px solid var(--line); font-weight:700; }
+  .btn-ghost:hover { border-color:var(--green-600); color:var(--green-700); background:var(--green-50); }
+  .btn-danger { background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; box-shadow:0 4px 14px rgba(220,38,38,.25); }
+  .btn-danger:hover { background:linear-gradient(135deg,#dc2626,#b91c1c); }
+  .btn:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+  .err { color:var(--red-600); font-size:12.5px; margin-top:10px; display:none; white-space:pre-wrap; line-height:1.5; }
+  .ok { color:var(--green-700); font-size:12.5px; margin-top:10px; display:none; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; padding:9px 8px; background:var(--green-50); color:var(--green-900); font-weight:700; border-bottom:1.5px solid var(--line); white-space:nowrap; }
+  td { padding:9px 8px; border-bottom:1px solid var(--line); white-space:nowrap; color:var(--ink-700); }
+  tr:last-child td { border-bottom:none; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10.5px; font-weight:700; }
+  .tag-pub { background:#e6f1fb; color:#185fa5; }
+  .tag-ind { background:var(--amber-100); color:var(--amber-600); }
+  .tag-sync { background:var(--green-100); color:var(--green-700); }
+  .tag-pending { background:#fdf0dd; color:var(--amber-600); }
+  .edit, .del { border:none; border-radius:8px; padding:7px 12px; font-size:15px; font-weight:800; cursor:pointer; }
+  .edit { background:#dbe9ff; color:#1d4ed8; margin-right:6px; }
+  .edit:hover { background:#c7dcff; }
+  .del { background:#fde2e2; color:var(--red-600); }
+  .del:hover { background:#fbcaca; }
+  .empty { text-align:center; padding:40px 20px; color:var(--ink-500); font-size:13.5px; }
+  .tablewrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(8px); background:var(--green-900); color:#fff; padding:12px 20px; border-radius:9px; font-size:13.5px; font-weight:600; opacity:0; pointer-events:none; transition:all .25s; box-shadow:0 4px 14px rgba(0,0,0,.18); z-index:50; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .actions { display:flex; gap:10px; margin-top:4px; }
+  .actions .btn { width:auto; flex:1; }
+  .gate { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .gatecard { background:#fff; border-radius:16px; padding:30px 26px; max-width:400px; width:100%; box-shadow:0 8px 30px rgba(0,0,0,.08); border:1px solid var(--line); }
+  .gatecard h2 { margin:0 0 6px; color:var(--green-900); font-size:19px; }
+  .gatecard p { color:var(--ink-500); font-size:13px; margin:0 0 20px; }
+  .changepanel { background:var(--amber-100); border:1px dashed var(--amber-500); border-radius:10px; padding:14px 16px; margin-top:14px; }
+  .changepanel p { font-size:12.5px; color:var(--amber-600); margin:0 0 10px; }
+  .logoImg { height:34px; width:auto; max-width:120px; object-fit:contain; border-radius:6px; background:#fff; padding:3px; }
+  .gatelogo { display:flex; justify-content:center; margin-bottom:14px; }
+  .gatelogo img { height:52px; width:auto; max-width:220px; object-fit:contain; }
+  .topbar .brandrow { display:flex; align-items:center; gap:10px; }
+  .infocard { border-radius:14px; padding:18px 20px; margin-bottom:18px; border:1px solid var(--line); background:linear-gradient(135deg,var(--green-50),#fff 60%); }
+  .infocard .scheme { font-size:14.5px; font-weight:700; color:var(--green-700); margin:0 0 8px; line-height:1.4; }
+  .infocard .appinfo { font-size:13px; color:var(--ink-700); margin:0 0 10px; white-space:pre-wrap; line-height:1.5; }
+  .infocard .devinfo { font-size:12px; color:var(--amber-600); font-weight:600; margin:0; }
+  .infocard .note { font-size:10.5px; color:var(--ink-300); margin-top:10px; }
+  .devlink { background:none; border:none; color:var(--ink-300); text-decoration:underline; font-size:11px; cursor:pointer; font-family:inherit; padding:0; margin-top:8px; }
+  #printArea { display:none; }
+  @media print {
+    body * { visibility:hidden; }
+    #printArea, #printArea * { visibility:visible; }
+    #printArea { display:block; position:absolute; left:0; top:0; width:100%; }
+    @page { size: landscape; margin:8mm; }
+  }
+  @media (max-width:480px) {
+    .topbar { padding:18px 16px 40px; }
+    .topbar h1 { font-size:18px; }
+    .wrap { padding:0 12px; }
+    .card { padding:16px; border-radius:12px; }
+    .statrow { grid-template-columns:repeat(3,1fr); gap:6px; }
+    .stat { padding:10px 8px; }
+    .stat .n { font-size:17px; }
+    .stat .l { font-size:10px; }
+    .row2 { grid-template-columns:1fr; gap:0; }
+    .sgrid { grid-template-columns:repeat(3,1fr); gap:8px 4px; }
+    .tab { flex:1 1 30%; font-size:11.5px; padding:8px 4px; }
+    .actions { flex-direction:column; }
+    .actions .btn { width:100%; }
+    select, input[type=text], input[type=number] { font-size:16px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="versionBanner" style="display:none; position:sticky; top:0; z-index:999; background:#dc2626; color:#fff; padding:12px 16px; font-size:13.5px; font-weight:700; text-align:center; line-height:1.5;">
+  ⚠️ Google Sheet जुन्या कोडवर चालत आहे — नवीन बदल दिसणार नाहीत!<br>
+  <span style="font-weight:500; font-size:12.5px;">उपाय: Apps Script मध्ये जा → Deploy → Manage deployments → ✏️ (Edit) → Version: "New version" निवडा → Deploy दाबा.</span>
+</div>
+
+<!-- ===================== (v9) Google लॉगिन ===================== -->
+<div class="gate" id="loginScreen" style="display:none; position:fixed; inset:0; z-index:1500; background:var(--paper); overflow:auto;">
+  <div class="gatecard">
+    <h2>Google खात्याने लॉगिन करा</h2>
+    <p>तुम्ही निवडलेल्या Gmail खात्यानेच अ‍ॅप चालेल. तुमचा सर्व डेटा तुमच्याच Google Drive मधील <b>"गावांचा डेटा — समृद्धी अ‍ॅप"</b> फोल्डरमध्ये सेव्ह होईल — ॲडमिनच्या Drive मध्ये काहीही साठवले जात नाही. अ‍ॅपला फक्त स्वतः बनवलेल्या फाईल्स दिसतात, तुमच्या इतर Drive फाईल्स दिसत नाहीत.</p>
+    <button class="btn btn-primary" id="loginBtn" onclick="signInUser()">🔐 Google ने लॉगिन करा</button>
+    <p class="err" id="loginErr"></p>
+  </div>
+</div>
+
+<!-- ===================== गाव-निवड गेट ===================== -->
+<div class="gate" id="gateScreen">
+  <div class="gatecard">
+    <div class="gatelogo" id="gateLogoWrap" style="display:none"><img id="gateLogoImg" alt="योजना लोगो"></div>
+    <div id="userRowGate" style="display:none; text-align:center; font-size:12px; color:#6b736c; margin-bottom:10px;">👤 <b id="userEmailGate"></b> · <a href="#" onclick="signOutUser(); return false;" style="color:#6b736c; text-decoration:underline;">लॉगआउट / खाते बदला</a></div>
+    <h2>तपशील निवडा</h2>
+    <p>जिल्हा → तालुका → गाव या क्रमाने निवडा. आधी याच गावाचा याच वर्षाचा डेटा भरलेला असेल तर तो आपोआप इथेच उघडेल (नवीन एक्सेल बनणार नाही, त्याच डेटामध्ये पुढे भरता येईल).</p>
+    <div class="field">
+      <label>जिल्हा</label>
+      <select id="gateJilha" onchange="onGateJilhaChange()"><option value="">-- जिल्हा निवडा --</option></select>
+    </div>
+    <div class="field">
+      <label>तालुका</label>
+      <select id="gateTaluka" onchange="onGateTalukaChange()" disabled><option value="">आधी जिल्हा निवडा</option></select>
+    </div>
+    <div class="field" id="newTalukaField" style="display:none">
+      <label>नवीन तालुक्याचे नाव</label>
+      <div class="qtyrow">
+        <input type="text" id="newTalukaInput" placeholder="तालुक्याचे नाव टाका">
+        <button class="btn btn-ghost" style="width:auto; padding:10px 14px;" onclick="addNewTaluka()">जोडा</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>ग्रामपंचायतीचे नाव (गाव)</label>
+      <select id="gateGP" onchange="onGateVillageChange()" disabled><option value="">आधी तालुका निवडा</option></select>
+    </div>
+    <div class="field" id="newVillageField" style="display:none">
+      <label>नवीन गावाचे नाव</label>
+      <div class="qtyrow">
+        <input type="text" id="newVillageInput" placeholder="गावाचे नाव टाका">
+        <button class="btn btn-ghost" style="width:auto; padding:10px 14px;" onclick="addNewVillage()">जोडा</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>सन (आर्थिक वर्ष)</label>
+      <select id="gateSaal" onchange="onGateVillageChange()"></select>
+      <p class="hint" style="margin-top:4px;">मागील/चालू/पुढील वर्षापैकी निवडा — असंच लिहिलेलं असल्याने एकाच वर्षाचा आराखडा चुकून वेगवेगळ्या स्वरूपात (उदा. "२०२४-२५" वेगळं व "२०२४ - २०२५" वेगळं) दुबार तयार होणार नाही.</p>
+    </div>
+    <p class="ok" id="gateExistingNotice" style="display:none"></p>
+    <div class="field">
+      <label>गावाची एकुण कुटूंब संख्या <span class="hint">(Sheet A साठी — महिना-निहाय वाटणी आपोआप Excel/Sheet मध्ये होते)</span></label>
+      <input type="number" id="gateKutumbTotal" min="0" placeholder="उदा. १३५०">
+    </div>
+    <div class="field">
+      <label>पासवर्ड (जबाबदार व्यक्तीचा) <span class="hint">डीफॉल्ट पासवर्ड गावाचे नाव इंग्लिशमध्ये + 123 असा असतो</span></label>
+      <input type="password" id="gateVillagePassword" placeholder="उदा. Shirwal123">
+      <p class="hint" id="gatePasswordHint" style="display:none; margin-top:4px;"></p>
+    </div>
+    <button class="btn btn-primary" onclick="confirmVillage()">निश्चित करा व पुढे जा</button>
+    <p class="err" id="gateErr"></p>
+    <p style="text-align:center; margin-top:14px;">
+      <a href="#" onclick="adminLogin(); return false;" style="color:#6b736c; font-size:12.5px; text-decoration:underline;">ॲडमिन लॉगिन</a>
+      <span id="adminStatusGate" style="display:none; color:#14532d; font-weight:700; font-size:12.5px;"> · ✓ ॲडमिन म्हणून लॉगिन झाले</span>
+      <br>
+      <button class="browserLinkBtn" onclick="openBrowserModal()" style="margin-top:8px;">🔗 ब्राउझरमध्ये उघडा / लिंक पाठवा</button>
+    </p>
+  </div>
+</div>
+
+
+<!-- ===================== मुख्य अ‍ॅप ===================== -->
+<div id="mainApp" style="display:none">
+  <div class="topbar">
+    <div class="brandrow" style="justify-content:center; text-align:center;">
+      <img class="logoImg" id="topbarLogo" alt="योजना लोगो" style="display:none">
+      <div>
+        <h1>समृद्धी लेबर बजेट</h1>
+        <p id="schemeNameLine">विकसित भारत - रोजगार आणि उपजीविका हमी अभियान - ग्रामीण (VB–GRAMG)</p>
+      </div>
+    </div>
+    <div class="navrow">
+      <button class="navbtn" onclick="goBackTab()">← मागे</button>
+      <button class="navbtn navbtn-exit" onclick="exitApp()">⏻ बाहेर पडा</button>
+    </div>
+    <div class="gpbadge">गाव: <b id="gpBadgeName"></b> · <span id="gpBadgeExtra"></span>
+      <a href="#" onclick="adminLogin(); return false;" id="adminLoginLinkApp" style="margin-left:10px; color:#6b736c; font-size:11.5px; text-decoration:underline;">ॲडमिन लॉगिन</a>
+      <span id="adminStatusApp" style="display:none; color:#14532d; font-weight:700; font-size:11.5px;"> · ✓ ॲडमिन</span>
+      <span id="userChipApp" style="display:none; margin-left:10px; font-size:11.5px;">👤 <span id="userEmailApp"></span> <a href="#" onclick="signOutUser(); return false;" style="color:#cfe6d6; text-decoration:underline;">लॉगआउट</a></span>
+      <button class="browserLinkBtn" onclick="openBrowserModal()" style="margin-left:10px; font-size:11.5px;">🔗 ब्राउझर/शेअर</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="statrow">
+      <div class="stat"><div class="n" id="statTotal">0</div><div class="l">एकुण नोंदी</div></div>
+      <div class="stat"><div class="n" id="statAmount">₹0</div><div class="l">एकुण रक्कम</div></div>
+      <div class="stat"><div class="n" id="statManday">0</div><div class="l">मनुष्यदिन</div></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="public">सार्वजनिक काम</div>
+      <div class="tab" data-tab="individual">वैयक्तिक काम</div>
+      <div class="tab" data-tab="records">नोंदी (<span id="tabCount">0</span>)</div>
+      <div class="tab" data-tab="download">डाउनलोड</div>
+      <div class="tab" data-tab="print">प्रिंट</div>
+      <div class="tab" data-tab="info">माहिती</div>
+      <div class="tab" data-tab="settings" id="settingsTab" style="display:none">Google Sheet (ॲडमिन)</div>
+    </div>
+
+    <!-- ===================== सार्वजनिक काम ===================== -->
+    <div class="panel" id="panel-public">
+      <div class="card">
+        <h2>सार्वजनिक काम</h2>
+        <p class="sub">उपचार गट निवडल्यावर त्या गटातली कामेच खाली दिसतील</p>
+
+        <div class="field">
+          <label>यंत्रणा</label>
+          <select id="pYantrana"></select>
+        </div>
+        <div class="field">
+          <label>उपचार गट</label>
+          <select id="pUpchar" onchange="onPublicUpcharChange()"></select>
+        </div>
+        <div class="field">
+          <label>कामाचे नाव</label>
+          <select id="pKaam" onchange="onPublicKaamChange()" disabled><option value="">आधी उपचार गट निवडा</option></select>
+        </div>
+        <div class="field">
+          <label>परिमाण <span class="hint">(फक्त संख्या टाका, एकक आपोआप येईल)</span></label>
+          <div class="qtyrow">
+            <input type="number" id="pParimaan" min="0" step="any" oninput="calcPublic()">
+            <div class="unitbox" id="pUnit">—</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>इतर योजना रक्कम (₹) <span class="hint">फक्त अभिसरण कामांसाठी</span></label>
+          <input type="number" id="pItar" min="0" value="0" oninput="calcPublic()">
+        </div>
+
+        <div class="summary">
+          <div class="st">संभाव्य आकडेवारी</div>
+          <div class="sgrid">
+            <div class="schip"><div class="v" id="pUnskilled">₹0</div><div class="k">अकुशल</div></div>
+            <div class="schip"><div class="v" id="pSkilled">₹0</div><div class="k">कुशल</div></div>
+            <div class="schip"><div class="v" id="pTotal">₹0</div><div class="k">एकुण</div></div>
+          </div>
+          <div class="sgrid" style="margin-top:10px">
+            <div class="schip"><div class="v" id="pManday">0</div><div class="k">मनुष्यदिन</div></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="pSaveBtn" onclick="savePublic()">काम जतन करा</button>
+        <button class="btn btn-ghost" id="pCancelBtn" onclick="cancelEdit()" style="display:none; margin-top:8px;">संपादन रद्द करा</button>
+        <p class="err" id="pErr"></p>
+      </div>
+    </div>
+
+    <!-- ===================== वैयक्तिक काम ===================== -->
+    <div class="panel" id="panel-individual" style="display:none">
+      <div class="card">
+        <h2>वैयक्तिक काम</h2>
+        <p class="sub">फक्त वैयक्तिक स्वरूपाची कामे इथे दिसतील</p>
+
+        <div class="field">
+          <label>यंत्रणा</label>
+          <select id="iYantrana"></select>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>कुटूंब रचना</label>
+            <select id="iKutumb"></select>
+          </div>
+          <div class="field">
+            <label>प्रवर्ग</label>
+            <select id="iJat"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label>लाभार्थीचे नाव</label>
+          <input type="text" id="iLabharthi">
+        </div>
+        <div class="field">
+          <label>कामाचे नाव</label>
+          <select id="iKaam" onchange="onIndivKaamChange()"></select>
+        </div>
+        <div class="field">
+          <label>परिमाण <span class="hint">(फक्त संख्या टाका, एकक आपोआप येईल)</span></label>
+          <div class="qtyrow">
+            <input type="number" id="iParimaan" min="0" step="any" oninput="calcIndiv()">
+            <div class="unitbox" id="iUnit">—</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>इतर योजना रक्कम (₹)</label>
+          <input type="number" id="iItar" min="0" value="0" oninput="calcIndiv()">
+        </div>
+
+        <div class="summary">
+          <div class="st">संभाव्य आकडेवारी</div>
+          <div class="sgrid">
+            <div class="schip"><div class="v" id="iUnskilled">₹0</div><div class="k">अकुशल</div></div>
+            <div class="schip"><div class="v" id="iSkilled">₹0</div><div class="k">कुशल</div></div>
+            <div class="schip"><div class="v" id="iTotal">₹0</div><div class="k">एकुण</div></div>
+          </div>
+          <div class="sgrid" style="margin-top:10px">
+            <div class="schip"><div class="v" id="iManday">0</div><div class="k">मनुष्यदिन</div></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="iSaveBtn" onclick="saveIndividual()">काम जतन करा</button>
+        <button class="btn btn-ghost" id="iCancelBtn" onclick="cancelEdit()" style="display:none; margin-top:8px;">संपादन रद्द करा</button>
+        <p class="err" id="iErr"></p>
+      </div>
+    </div>
+
+    <!-- ===================== नोंदी ===================== -->
+    <div class="panel" id="panel-records" style="display:none">
+      <div class="card">
+        <h2>जतन केलेली सर्व कामे</h2>
+        <div class="changepanel">
+          <p>सध्याचा तपशील: <b id="curGpLine"></b> — नवीन तपशिलासाठी सुरुवात करायची असल्यास आधी सर्व डेटा सेव्ह करून घ्या.</p>
+          <button class="btn btn-secondary" onclick="startChangeVillage()">तपशील बदला</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden">
+        <div id="recordsArea"></div>
+      </div>
+    </div>
+
+    <!-- ===================== डाउनलोड ===================== -->
+    <div class="panel" id="panel-download" style="display:none">
+      <div class="card">
+        <h2>डाउनलोड</h2>
+        <p class="sub">मूळ नमुना शीटप्रमाणेच (शीर्षक, रंग, लँडस्केप) तयार होणारी फाईल डाउनलोड करा</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="downloadExcel()">Excel डाउनलोड (.xlsx)</button>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn btn-secondary" onclick="triggerPrint()">PDF डाउनलोड (प्रिंट डायलॉगमधून "Save as PDF" निवडा)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== प्रिंट ===================== -->
+    <div class="panel" id="panel-print" style="display:none">
+      <div class="card">
+        <h2>प्रिंट</h2>
+        <p class="sub">थेट प्रिंटरवर पाठवा किंवा प्रिंट डायलॉगमधून PDF सेव्ह करा — मूळ नमुना शीटप्रमाणेच लँडस्केप स्वरूपात</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="triggerPrint()">प्रिंट करा</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== माहिती (उपयुक्त PDF) ===================== -->
+    <div class="panel" id="panel-info" style="display:none">
+      <div class="card">
+        <h2>उपयुक्त माहिती</h2>
+        <p class="sub">कामाची यादी, अ‍ॅप कसे वापरावे यासारखी माहिती असलेले PDF — पाहण्या व प्रिंट करण्यासाठी उघडा</p>
+        <div id="pdfInfoArea"><p class="hint">सध्या इथे कोणतेही PDF उपलब्ध नाहीत.</p></div>
+      </div>
+    </div>
+
+    <!-- ===================== Google Sheet सेटिंग्ज (फक्त ॲडमिनसाठी) ===================== -->
+    <div class="panel" id="panel-settings" style="display:none">
+      <div class="card">
+        <h2>Google Sheet जोडणी</h2>
+        <p class="sub">Apps Script Deploy केल्यावर मिळालेली Web App URL इथे एकदा पेस्ट करा — त्यानंतर कामांची यादी, सिंक, योजनेचे नाव/लोगो/माहिती सर्व आपोआप या Sheet शी जोडले जाईल.</p>
+        <div class="field">
+          <label>Web App URL</label>
+          <input type="text" id="gsUrlInput" placeholder="https://script.google.com/macros/s/xxxxx/exec">
+        </div>
+        <button class="btn btn-primary" onclick="saveGSUrl()">जतन करा व जोडणी तपासा</button>
+        <p class="ok" id="gsUrlOk" style="display:none">जोडणी यशस्वी ✓ — कामांची यादी मिळाली</p>
+        <p class="err" id="gsUrlErr" style="display:none"></p>
+      </div>
+      <div class="card">
+        <h2>गावाचा पासवर्ड रिसेट करा</h2>
+        <p class="sub">डीफॉल्ट पासवर्ड गावाचे नाव इंग्लिशमध्ये + 123 असतो. जबाबदार व्यक्ती बदलली, किंवा वेगळा (कस्टम) पासवर्ड हवा असल्यास इथून सेट करा — तो डीफॉल्टपेक्षा प्राधान्याने वापरला जाईल.</p>
+        <div class="field"><label>जिल्हा</label><input type="text" id="rstJilha"></div>
+        <div class="field"><label>तालुका</label><input type="text" id="rstTaluka"></div>
+        <div class="field"><label>गाव</label><input type="text" id="rstGav"></div>
+        <div class="field"><label>नवीन पासवर्ड</label><input type="text" id="rstNewPwd"></div>
+        <button class="btn btn-secondary" onclick="adminResetVillagePasswordUI()">पासवर्ड रिसेट करा</button>
+        <p class="ok" id="rstOk" style="display:none">पासवर्ड रिसेट झाला ✓</p>
+        <p class="err" id="rstErr" style="display:none"></p>
+      </div>
+    </div>
+
+    <div class="infocard" id="infoCard" style="display:none">
+      <p class="scheme" id="infoSchemeName"></p>
+      <p class="appinfo" id="infoAppInfo" style="display:none"></p>
+      <p class="devinfo" id="infoDevInfo" style="display:none"></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<!-- ===================== ॲपची लिंक ब्राउझरमध्ये उघडा / शेअर करा (APK-मध्ये उपयोगी) ===================== -->
+<div id="browserModalOverlay" onclick="if(event.target===this) closeBrowserModal()">
+  <div class="browserModalBox">
+    <h3>ॲप ब्राउझरमध्ये उघडा किंवा लिंक पाठवा</h3>
+    <p class="sub">मोबाईल ॲप (APK) मधून हे उघडलं असल्यास, खालील लिंक कॉपी करून किंवा शेअर करून तुम्ही ती फोनमधल्या नेहमीच्या ब्राउझरमध्ये (Chrome वगैरे) उघडू शकता किंवा दुसऱ्या कुणाला पाठवू शकता.</p>
+    <input type="text" id="browserModalUrl" readonly onclick="this.select()">
+    <div class="btnrow">
+      <button class="btn btn-secondary" onclick="copyBrowserLink()">📋 कॉपी करा</button>
+      <button class="btn btn-secondary" id="shareBrowserBtn" onclick="shareBrowserLink()" style="display:none">📤 शेअर करा</button>
+      <a class="btn btn-primary" id="openBrowserAnchor" href="#" target="_blank" rel="noopener">🌐 नवीन टॅबमध्ये उघडा</a>
+    </div>
+    <p class="ok" id="browserCopyOk" style="display:none; margin-top:10px;">लिंक कॉपी झाली ✓</p>
+    <div class="closeRow"><button class="browserLinkBtn" onclick="closeBrowserModal()">बंद करा</button></div>
+  </div>
+</div>
+
+<script>
+// ===================== (v9) स्वतंत्र HTML / APK साठी मूलभूत सोय =====================
+// Claude च्या बाहेर (साध्या ब्राउझरमध्ये किंवा APK मध्ये) window.storage नसतं — त्यामुळे ते localStorage वर चालवतो
+if (!window.storage) {
+  window.storage = {
+    async get(k) { try { const v = localStorage.getItem('smr_' + k); return v === null ? null : { key: k, value: v }; } catch (e) { return null; } },
+    async set(k, v) { try { localStorage.setItem('smr_' + k, v); } catch (e) {} return { key: k, value: v }; },
+    async delete(k) { try { localStorage.removeItem('smr_' + k); } catch (e) {} return { key: k, deleted: true }; }
+  };
+}
+// APK (Android WebView) मध्ये: Excel डाउनलोड व प्रिंट Android च्या सुविधांतून चालवतो
+if (window.AndroidBridge) {
+  if (window.AndroidBridge.saveBase64) {
+    const origAnchorClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+      if (this.download && this.href && this.href.indexOf('blob:') === 0) {
+        const fname = this.download;
+        fetch(this.href).then(r => r.blob()).then(b => new Promise(res => {
+          const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.readAsDataURL(b);
+        })).then(b64 => window.AndroidBridge.saveBase64(fname, b64));
+        return;
+      }
+      return origAnchorClick.call(this);
+    };
+  }
+  if (window.AndroidBridge.print) window.print = function () { window.AndroidBridge.print(); };
+}
+
+// ===================== (v9) Google लॉगिन + प्रत्येक वापरकर्त्याचे स्वतःचे Google Drive =====================
+// आता गाव-शीट ॲडमिनच्या Drive मध्ये नाही, तर जो वापरकर्ता ज्या Gmail ने लॉगिन करेल त्याच्याच Drive मध्ये
+// ("गावांचा डेटा — समृद्धी अ‍ॅप" फोल्डरमध्ये) तयार होते. ॲडमिनची Google Sheet फक्त मास्टर माहिती
+// (कामांची यादी, दर, पासवर्ड, जिल्हा-तालुका-गाव यादी) साठी वापरली जाते — त्यात गावांचा डेटा साठत नाही.
+//
+// एकदाच करायचे: Google Cloud Console मधून "Web application" प्रकारचा OAuth Client ID बनवून खाली पेस्ट करा
+// (PC/HTML आवृत्तीसाठी). Android APK साठी वेगळा Client ID लागत नाही कोडमध्ये — तो Android Studio
+// प्रोजेक्टच्या package name + SHA-1 वरून Google Cloud मध्ये नोंदवला जातो (सेटअप मार्गदर्शक पहा).
+const GOOGLE_WEB_CLIENT_ID = 'https://parshurampawar3381.github.io/Aarakhada/app.html';
+// (ऐच्छिक) हे HTML तुम्ही इंटरनेटवर कुठे ठेवले आहे त्याची लिंक — APK मधील "ब्राउझर/शेअर" बटणासाठी
+const PUBLIC_WEB_URL = '';
+// फक्त "drive.file" — अ‍ॅपला फक्त स्वतः बनवलेल्या फाईल्स दिसतात; वापरकर्त्याच्या इतर Drive फाईल्स दिसत नाहीत
+const GOOGLE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets';
+const DRIVE_API = 'https://www.googleapis.com/drive/v3';
+
+const Auth = (function () {
+  let token = '', expiresAt = 0, email = '', displayName = '', tokenClient = null, inflight = null;
+  const holder = { ok: null, fail: null };
+  const nativeWaiters = {};
+  const isNativeApp = () => !!(window.AndroidBridge && typeof window.AndroidBridge.getToken === 'function');
+
+  // Android (APK) बाजूने उत्तर इथे येते
+  window.__onNativeToken = function (id, tok, err) {
+    const w = nativeWaiters[id]; if (!w) return; delete nativeWaiters[id];
+    if (err || !tok) w.reject(new Error(err || 'NO_TOKEN')); else w.resolve({ access_token: tok, expires_in: 2700 });
+  };
+  function nativeRequest(interactive) {
+    return new Promise((resolve, reject) => {
+      const id = 'n' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      nativeWaiters[id] = { resolve, reject };
+      window.AndroidBridge.getToken(id, !!interactive);
+    });
+  }
+  function loadGis() {
+    return new Promise((resolve, reject) => {
+      if (window.google && google.accounts && google.accounts.oauth2) { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Google लॉगिनची स्क्रिप्ट लोड झाली नाही — इंटरनेट तपासा.'));
+      document.head.appendChild(s);
+    });
+  }
+  async function webRequest(interactive) {
+    if (!GOOGLE_WEB_CLIENT_ID || GOOGLE_WEB_CLIENT_ID.indexOf('PASTE_') === 0) {
+      throw new Error('GOOGLE_WEB_CLIENT_ID सेट केलेला नाही — HTML मध्ये वरती तुमचा Web Client ID पेस्ट करा (सेटअप मार्गदर्शक पहा).');
+    }
+    await loadGis();
+    return new Promise((resolve, reject) => {
+      if (!tokenClient) {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_WEB_CLIENT_ID, scope: GOOGLE_DRIVE_SCOPE,
+          callback: (r) => { if (holder.ok) holder.ok(r); },
+          error_callback: (e) => { if (holder.fail) holder.fail(e); }
+        });
+      }
+      holder.ok = (r) => (r && r.access_token) ? resolve(r) : reject(new Error((r && (r.error_description || r.error)) || 'लॉगिन अयशस्वी'));
+      holder.fail = (e) => reject(new Error(e && e.type === 'popup_closed' ? 'लॉगिन रद्द केले.' : ('लॉगिन अयशस्वी: ' + ((e && (e.type || e.message)) || ''))));
+      const opts = interactive ? { prompt: 'select_account' } : { prompt: '' };
+      if (!interactive && email) opts.hint = email;
+      tokenClient.requestAccessToken(opts);
+    });
+  }
+  async function acquire(interactive) {
+    const r = isNativeApp() ? await nativeRequest(interactive) : await webRequest(interactive);
+    token = r.access_token; expiresAt = Date.now() + (Number(r.expires_in) || 3000) * 1000;
+    return token;
+  }
+  async function fetchUser() {
+    const res = await fetch(DRIVE_API + '/about?fields=user(emailAddress,displayName)', { headers: { Authorization: 'Bearer ' + token } });
+    if (!res.ok) throw new Error('खात्याची माहिती मिळाली नाही (HTTP ' + res.status + ')');
+    const j = await res.json();
+    email = (j.user && j.user.emailAddress || '').toLowerCase();
+    displayName = (j.user && j.user.displayName) || '';
+    if (!email) throw new Error('ईमेल मिळाला नाही');
+  }
+  const api = {
+    onAuthLost: null,
+    isNativeApp,
+    getEmail: () => email,
+    getName: () => displayName,
+    isSignedIn: () => !!email && !!token,
+    invalidate() { token = ''; expiresAt = 0; },
+    /** वैध टोकन देते; संपले असल्यास शांतपणे नवीन मिळवते, जमलं नाही तर लॉगिन स्क्रीन दाखवायला सांगते */
+    async getToken() {
+      if (token && Date.now() < expiresAt - 90000) return token;
+      if (!inflight) {
+        inflight = acquire(false).finally(() => { inflight = null; });
+      }
+      try { await inflight; return token; }
+      catch (e) {
+        if (api.onAuthLost) api.onAuthLost(e);
+        throw new Error('लॉगिन सत्र संपले — पुन्हा Google ने लॉगिन करा.');
+      }
+    },
+    async signIn() { await acquire(true); await fetchUser(); return { email, name: displayName }; },
+    /** फक्त APK मध्ये — आधी लॉगिन केलेलं असेल तर कोणतंही बटण न दाबता आपोआप लॉगिन */
+    async silentSignIn() {
+      if (!isNativeApp()) return null;
+      try { await acquire(false); await fetchUser(); return { email, name: displayName }; } catch (e) { return null; }
+    },
+    signOut() {
+      token = ''; expiresAt = 0; email = ''; displayName = '';
+      try { if (isNativeApp() && window.AndroidBridge.signOut) window.AndroidBridge.signOut(); } catch (e) {}
+    }
+  };
+  return api;
+})();
+
+/** (v9) केंद्रीय Apps Script ला जाणारे वाचन-कॉल फोनमध्ये/ब्राउझरमध्ये काही वेळ साठवून ठेवते —
+ * हजारो वापरकर्ते असले तरी ॲडमिनच्या फ्री Apps Script ची मर्यादा (दैनिक चालण्याचा वेळ) संपू नये म्हणून.
+ * यादी/दर बदलल्यावर जास्तीत जास्त ३० मिनिटांत अ‍ॅपमध्ये दिसतात. */
+const GS_CACHE_PREFIX = 'smr_gc_';
+function clearGsCache() {
+  try { Object.keys(localStorage).filter(k => k.indexOf(GS_CACHE_PREFIX) === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+}
+async function gsGet(params, ttlMs, force) {
+  const url = GS_URL + '?' + params;
+  const ck = GS_CACHE_PREFIX + url;
+  if (!force && ttlMs) {
+    try { const c = JSON.parse(localStorage.getItem(ck) || 'null'); if (c && Date.now() - c.t < ttlMs) return c.d; } catch (e) {}
+  }
+  const res = await fetch(url + '&_t=' + Date.now(), { cache: 'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const d = await res.json();
+  if (ttlMs && d && d.ok) { try { localStorage.setItem(ck, JSON.stringify({ t: Date.now(), d })); } catch (e) {} }
+  return d;
+}
+
+/** Google API कॉल (Drive/Sheets) — लॉगिन टोकनसहित; 401 आल्यास एकदा नवीन टोकन घेऊन पुन्हा प्रयत्न */
+async function gapi(url, opts) {
+  opts = opts || {};
+  let refreshed = false, waits = 0;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const t = await Auth.getToken();
+    const headers = Object.assign({ Authorization: 'Bearer ' + t }, opts.headers || {});
+    const res = await fetch(url, Object.assign({}, opts, { headers }));
+    if (res.status === 401 && !refreshed) { refreshed = true; Auth.invalidate(); continue; }
+    // खूप गर्दी (मर्यादा) असल्यास थोडा वेळ थांबून पुन्हा प्रयत्न
+    if ((res.status === 429 || res.status === 503) && waits < 5) {
+      waits++; await new Promise(r => setTimeout(r, Math.pow(2, waits) * 1000 + Math.random() * 1500)); continue;
+    }
+    if (!res.ok) {
+      let msg = '';
+      try { const j = await res.json(); msg = (j.error && j.error.message) || ''; } catch (e) {}
+      throw new Error('Google त्रुटी (' + res.status + ')' + (msg ? ': ' + msg : ''));
+    }
+    return res.status === 204 ? null : res.json();
+  }
+}
+
+// ===================== (v9) गाव-शीट — वापरकर्त्याच्या स्वतःच्या Drive मध्ये (Google Sheets API) =====================
+// खालील रचना (पाने, स्तंभ, सूत्रे, रंग, ड्रॉपडाऊन, महिन्यांची टक्केवारी, रक्कम/मनुष्यदिनाचे गणित) आधीच्या
+// Apps Script मधील (buildVillageEntrySheet / buildVillageASheet / writeEntryToRow) प्रमाणेच आहे — फक्त ती
+// आता ॲडमिनच्या सर्व्हरऐवजी वापरकर्त्याच्या लॉगिननेच त्याच्या Drive मध्ये बनते.
+const VILLAGE_FOLDER_NAME = 'गावांचा डेटा — समृद्धी अ‍ॅप';
+const ENTRY_SHEET = 'App-नोंदी';
+const A_SHEET = 'A';
+const VILLAGE_INFO_SHEET = 'गाव-माहिती';
+const FIRST_DATA_ROW = 7;      // App-नोंदी मधील पहिली डेटा-ओळ
+const BLANK_ROWS = 200;        // आधीच सूत्रे तयार ठेवलेल्या ओळी
+const LAST_DATA_ROW = FIRST_DATA_ROW + BLANK_ROWS - 1;
+const SUMMARY_MANDAY_ROW = LAST_DATA_ROW + 6;
+const FIRST_A_DATA_ROW = 7;
+const VILLAGE_INFO_ROW = { jilha: 2, taluka: 3, gav: 4, saal: 5, kutumbTotal: 6 };
+// "A" शीटसाठी Apps Script मधील मूळ महिना-निहाय टक्केवारी (HTML च्या Excel निर्यातीतील टक्केवारीपेक्षा वेगळी आहे — मूळ स्क्रिप्टप्रमाणेच ठेवली आहे)
+const SHEET_EXCLUDED_MONTHS = ['जुलै', 'ऑगस्ट', 'सप्टेंबर'];
+const SHEET_MONTH_PERCENT = { 'एप्रिल':10, 'मे':11, 'जून':12, 'जुलै':0, 'ऑगस्ट':0, 'सप्टेंबर':0, 'ऑक्टोंबर':10, 'नोव्हेंबर':12, 'डिसेंबर':12, 'जानेवारी':13, 'फेब्रुवारी':9, 'मार्च':11 };
+
+const SID_INFO = 11, SID_ENTRY = 12, SID_A = 13;
+
+function colIdx(letters) { let n = 0; for (let i = 0; i < letters.length; i++) n = n * 26 + (letters.charCodeAt(i) - 64); return n; }
+function colLet(n) { let s = ''; while (n > 0) { const t = (n - 1) % 26; s = String.fromCharCode(65 + t) + s; n = (n - t - 1) / 26; } return s; }
+function hexRgb(hex) { return { red: parseInt(hex.slice(1, 3), 16) / 255, green: parseInt(hex.slice(3, 5), 16) / 255, blue: parseInt(hex.slice(5, 7), 16) / 255 }; }
+function px(w) { return Math.round(w * 7 + 8); } // मूळ स्क्रिप्टमधील "रुंदी (अक्षरे)" ला Sheets च्या पिक्सेलमध्ये बदलते
+function gridRange(sheetId, a1) {
+  const m = /^([A-Z]+)(\d+)(?::([A-Z]+)(\d+))?$/.exec(a1);
+  if (!m) throw new Error('चुकीचा रेंज: ' + a1);
+  const c1 = colIdx(m[1]), r1 = parseInt(m[2], 10), c2 = m[3] ? colIdx(m[3]) : c1, r2 = m[4] ? parseInt(m[4], 10) : r1;
+  return { sheetId, startRowIndex: r1 - 1, endRowIndex: r2, startColumnIndex: c1 - 1, endColumnIndex: c2 };
+}
+/** style(sheetId, 'A1:B2', {bg, bold, size, color, h, v, wrap, nf}) → repeatCell विनंती */
+function styleReq(sheetId, a1, o) {
+  const f = {}, fields = [];
+  if (o.bg) { f.backgroundColor = hexRgb(o.bg); fields.push('backgroundColor'); }
+  const tf = {};
+  if (o.bold !== undefined) { tf.bold = o.bold; fields.push('textFormat.bold'); }
+  if (o.size) { tf.fontSize = o.size; fields.push('textFormat.fontSize'); }
+  if (o.color) { tf.foregroundColor = hexRgb(o.color); fields.push('textFormat.foregroundColor'); }
+  if (Object.keys(tf).length) f.textFormat = tf;
+  if (o.h) { f.horizontalAlignment = o.h; fields.push('horizontalAlignment'); }
+  if (o.v) { f.verticalAlignment = o.v; fields.push('verticalAlignment'); }
+  if (o.wrap) { f.wrapStrategy = 'WRAP'; fields.push('wrapStrategy'); }
+  if (o.nf) { f.numberFormat = { type: 'NUMBER', pattern: o.nf }; fields.push('numberFormat'); }
+  return { repeatCell: { range: gridRange(sheetId, a1), cell: { userEnteredFormat: f }, fields: fields.map(x => 'userEnteredFormat.' + x).join(',') } };
+}
+function borderReq(sheetId, a1, hex) {
+  const b = { style: 'SOLID', color: hexRgb(hex || '#000000') };
+  return { updateBorders: { range: gridRange(sheetId, a1), top: b, bottom: b, left: b, right: b, innerHorizontal: b, innerVertical: b } };
+}
+function mergeReq(sheetId, a1) { return { mergeCells: { range: gridRange(sheetId, a1), mergeType: 'MERGE_ALL' } }; }
+function colWidthReq(sheetId, col1, col2, pixels) {
+  return { updateDimensionProperties: { range: { sheetId, dimension: 'COLUMNS', startIndex: col1 - 1, endIndex: col2 }, properties: { pixelSize: pixels }, fields: 'pixelSize' } };
+}
+function rowHeightReq(sheetId, row1, row2, pixels) {
+  return { updateDimensionProperties: { range: { sheetId, dimension: 'ROWS', startIndex: row1 - 1, endIndex: row2 }, properties: { pixelSize: pixels }, fields: 'pixelSize' } };
+}
+function freezeReq(sheetId, rows) {
+  return { updateSheetProperties: { properties: { sheetId, gridProperties: { frozenRowCount: rows, hideGridlines: true } }, fields: 'gridProperties.frozenRowCount,gridProperties.hideGridlines' } };
+}
+function freezeKeepGridReq(sheetId, rows) {
+  return { updateSheetProperties: { properties: { sheetId, gridProperties: { frozenRowCount: rows } }, fields: 'gridProperties.frozenRowCount' } };
+}
+function listValidationReq(sheetId, a1, list) {
+  return { setDataValidation: { range: gridRange(sheetId, a1), rule: { condition: { type: 'ONE_OF_LIST', values: list.map(v => ({ userEnteredValue: String(v) })) }, showCustomUi: true, strict: false } } };
+}
+const q1 = (name) => "'" + name + "'";
+
+/** नवीन गाव-शीटची रचना (पाने, मर्ज, रंग, रुंदी, ड्रॉपडाऊन) + सर्व मजकूर/सूत्रे — (formatRequests, valueData) परत देते */
+function buildVillageSheetSpec(v, wage) {
+  wage = Number(wage) || 297;
+  const reqs = [];
+  const data = []; // values.batchUpdate साठी {range, values}
+  const put = (sheet, a1, vals) => data.push({ range: q1(sheet) + '!' + a1, values: vals });
+  const CYAN = '#00FFFF', TITLE = '#002060', GREEN = '#14532d', LIGHT = '#f5f5f0', YEL = '#fffacd', GRID = '#c9c9c9';
+
+  /* ---------- 1) गाव-माहिती ---------- */
+  put(VILLAGE_INFO_SHEET, 'A1', [['या गावाची मूळ माहिती — फक्त "एकुण कुटूंब संख्या" (B6) बदलू शकता, बाकी बदलू नये.']]);
+  reqs.push(mergeReq(SID_INFO, 'A1:B1'), styleReq(SID_INFO, 'A1:B1', { bold: true, wrap: true, bg: GREEN, color: '#ffffff' }));
+  const infoRows = [
+    [VILLAGE_INFO_ROW.jilha, 'जिल्हा', v.jilha],
+    [VILLAGE_INFO_ROW.taluka, 'तालुका', v.taluka],
+    [VILLAGE_INFO_ROW.gav, 'गाव', v.gav],
+    [VILLAGE_INFO_ROW.saal, 'सन (आर्थिक वर्ष)', v.saal],
+    [VILLAGE_INFO_ROW.kutumbTotal, 'एकुण कुटूंब संख्या (अ‍ॅपमधून आपोआप येते)', 0]
+  ];
+  infoRows.forEach(r => {
+    put(VILLAGE_INFO_SHEET, 'A' + r[0] + ':B' + r[0], [[r[1], r[2]]]);
+    reqs.push(styleReq(SID_INFO, 'A' + r[0], { bold: true, bg: LIGHT }), styleReq(SID_INFO, 'B' + r[0], { bg: YEL }));
+  });
+  reqs.push(colWidthReq(SID_INFO, 1, 1, 280), colWidthReq(SID_INFO, 2, 2, 260), freezeKeepGridReq(SID_INFO, 1));
+
+  /* ---------- 2) App-नोंदी (A ते AA — २७ स्तंभ) ---------- */
+  const E = SID_ENTRY;
+  put(ENTRY_SHEET, 'A1', [[' आराखडा ']]);
+  put(ENTRY_SHEET, 'A2', [['ग्रामपंचायत निहाय कामाचे नियोजन (WORK PROJECTION) — App मार्फत नोंदी']]);
+  put(ENTRY_SHEET, 'A3', [['(रक्कम रुपयांत) — गाव/तालुका/जिल्हा/सन "गाव-माहिती" पानावरून येते']]);
+  [['A1:AA1', 20], ['A2:AA2', 14], ['A3:AA3', 11]].forEach(t => {
+    reqs.push(mergeReq(E, t[0]), styleReq(E, t[0], { size: t[1], bold: true, color: TITLE, h: 'CENTER', v: 'MIDDLE' }));
+  });
+  reqs.push(rowHeightReq(E, 1, 1, 30));
+
+  ['A4:A6', 'B4:B6', 'C4:C6', 'D4:D6', 'E4:K4', 'L4:U4', 'V4:AA4',
+   'E5:E6', 'F5:F6', 'G5:J5', 'K5:K6', 'L5:L6', 'M5:M6', 'N5:N6', 'O5:O6', 'P5:P6', 'Q5:T5', 'U5:U6', 'V5:V6', 'W5:Z5', 'AA5:AA6'
+  ].forEach(m => reqs.push(mergeReq(E, m)));
+  const hdr = [
+    ['A4', 'अ.क्र.'], ['B4', 'ग्रामपंचायत'], ['C4', 'यंत्रणा'], ['D4', 'कामाचा प्रकार'], ['E4', 'सार्वजनिक कामे'],
+    ['L4', 'वैयक्तीक कामे'], ['V4', 'एकुण'],
+    ['E5', 'कामाचे नाव'], ['F5', 'परिमाण'], ['G5', 'संभाव्य किंमत (रक्कम)'], ['K5', 'संभाव्य मनुष्यदिन निर्मीती'],
+    ['L5', 'कुटूंब रचणा'], ['M5', 'कामाचे नाव'], ['N5', 'लाभार्थीचे नाव'], ['O5', 'प्रवर्ग'], ['P5', 'परिमाण'],
+    ['Q5', 'संभाव्य किंमत (रक्कम)'], ['U5', 'संभाव्य मनुष्यदिन निर्मीती'],
+    ['V5', 'एकुण कामे (संख्या)'], ['W5', 'संभाव्य किंमत (रक्कम)'], ['AA5', 'संभाव्य मनुष्यदिन निर्मीती'],
+    ['G6', 'अकुशल'], ['H6', 'कुशल'], ['I6', 'इतर योजना'], ['J6', 'एकुण'],
+    ['Q6', 'अकुशल'], ['R6', 'कुशल'], ['S6', 'इतर योजना'], ['T6', 'एकुण'],
+    ['W6', 'अकुशल'], ['X6', 'कुशल'], ['Y6', 'इतर योजना'], ['Z6', 'एकुण']
+  ];
+  hdr.forEach(h => put(ENTRY_SHEET, h[0], [[h[1]]]));
+  reqs.push(styleReq(E, 'A4:AA6', { bold: true, bg: CYAN, h: 'CENTER', v: 'MIDDLE', wrap: true, size: 12 }));
+  reqs.push(rowHeightReq(E, 4, 4, 30), rowHeightReq(E, 5, 5, 30), rowHeightReq(E, 6, 6, 60));
+
+  const widths = { A:10,B:14,C:16,D:22,E:26,F:14,G:13,H:11,I:12,J:13,K:11,L:16,M:20,N:22,O:11,P:14,Q:13,R:11,S:12,T:13,U:11,V:11,W:13,X:11,Y:12,Z:13,AA:13 };
+  Object.keys(widths).forEach(c => reqs.push(colWidthReq(E, colIdx(c), colIdx(c), px(widths[c]))));
+
+  // डेटा-ओळींची सूत्रे (A, V..AA)
+  const colA = [], colV = [], colWtoAA = [];
+  for (let r = FIRST_DATA_ROW; r <= LAST_DATA_ROW; r++) {
+    colA.push(['=IF(OR(E' + r + '<>"",M' + r + '<>""),ROW()-' + (FIRST_DATA_ROW - 1) + ',"")']);
+    colV.push(['=COUNTA(F' + r + ',P' + r + ')']);
+    colWtoAA.push(['=G' + r + '+Q' + r, '=H' + r + '+R' + r, '=I' + r + '+S' + r, '=J' + r + '+T' + r, '=K' + r + '+U' + r]);
+  }
+  put(ENTRY_SHEET, 'A' + FIRST_DATA_ROW + ':A' + LAST_DATA_ROW, colA);
+  put(ENTRY_SHEET, 'V' + FIRST_DATA_ROW + ':V' + LAST_DATA_ROW, colV);
+  put(ENTRY_SHEET, 'W' + FIRST_DATA_ROW + ':AA' + LAST_DATA_ROW, colWtoAA);
+
+  const body = (c1, c2) => c1 + FIRST_DATA_ROW + ':' + c2 + LAST_DATA_ROW;
+  reqs.push(styleReq(E, body('A', 'AA'), { size: 11 }));
+  reqs.push(styleReq(E, body('B', 'U'), { bg: YEL }));
+  ['G','H','J','K','Q','R','T','U','W','X','Y','Z','AA'].forEach(c => reqs.push(styleReq(E, body(c, c), { nf: '#,##0' })));
+  reqs.push(borderReq(E, body('A', 'AA'), GRID));
+
+  reqs.push(listValidationReq(E, body('C', 'C'), YANTRANA), listValidationReq(E, body('D', 'D'), UPCHAR),
+            listValidationReq(E, body('L', 'L'), KUTUMB), listValidationReq(E, body('O', 'O'), JAT));
+  reqs.push(freezeReq(E, FIRST_DATA_ROW - 1));
+
+  // एकूण सारांश
+  const first = FIRST_DATA_ROW, last = LAST_DATA_ROW, sumRow = last + 3;
+  put(ENTRY_SHEET, 'A' + sumRow, [['एकूण सारांश']]);
+  reqs.push(styleReq(E, 'A' + sumRow, { bold: true }));
+  const labels = [
+    ['एकुण नोंदी (काम-संख्या)', '=SUM(V' + first + ':V' + last + ')'],
+    ['एकुण रक्कम (₹)', '=SUM(Z' + first + ':Z' + last + ')'],
+    ['एकुण मनुष्यदिन', '=SUM(AA' + first + ':AA' + last + ')'],
+    ['सार्वजनिक कामांची रक्कम (₹)', '=SUM(J' + first + ':J' + last + ')'],
+    ['वैयक्तिक कामांची रक्कम (₹)', '=SUM(T' + first + ':T' + last + ')'],
+    ['एकुण अकुशल रक्कम (₹)', '=SUM(W' + first + ':W' + last + ')']
+  ];
+  labels.forEach((p, i) => {
+    put(ENTRY_SHEET, 'A' + (sumRow + 1 + i) + ':B' + (sumRow + 1 + i), [[p[0], p[1]]]);
+    reqs.push(styleReq(E, 'B' + (sumRow + 1 + i), { bold: true }));
+  });
+
+  /* ---------- 3) A (महिना-निहाय कुटूंब व मनुष्यदिन) ---------- */
+  const S = SID_A;
+  put(A_SHEET, 'A1', [['प्रपत्र- अ']]);
+  put(A_SHEET, 'A2', [['="लेबर बजेट सन "&' + q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.saal]]);
+  put(A_SHEET, 'A3', [['="ग्रामपंचायत "&' + q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.gav + '&",  तालुका - "&' + q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.taluka + '&",  जिल्हा - "&' + q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.jilha]]);
+  reqs.push(styleReq(S, 'A1:A3', { bold: true, size: 20 }));
+
+  ['A4:A6', 'B4:B6', 'C4:Z4', 'AA4:AC4'].forEach(m => reqs.push(mergeReq(S, m)));
+  put(A_SHEET, 'A4', [['अ.क्र.']]); put(A_SHEET, 'B4', [['ग्रामपंचायतीचे नाव']]);
+  put(A_SHEET, 'C4', [['महिना निहाय मागणी केलेल्या कुटूंबाचा व मनुष्यदिन निर्मीतीचा तपशील']]);
+  put(A_SHEET, 'AA4', [['एकुण']]);
+  const monthCols = {};
+  MONTHS.forEach((m, i) => { monthCols[m] = 3 + i * 2; });
+  MONTHS.forEach(m => {
+    const c = monthCols[m], fam = colLet(c), md = colLet(c + 1);
+    reqs.push(mergeReq(S, fam + '5:' + md + '5'));
+    put(A_SHEET, fam + '5', [[m]]); put(A_SHEET, fam + '6:' + md + '6', [['कुटूंब संख्या', 'मनुष्य दिन']]);
+  });
+  put(A_SHEET, 'AA6:AC6', [['कुटूंब संख्या', 'मनुष्य दिन', 'मुल्य (₹)']]);
+  reqs.push(styleReq(S, 'A4:AC6', { bold: true, size: 12, bg: CYAN, h: 'CENTER', v: 'MIDDLE', wrap: true }));
+  reqs.push(borderReq(S, 'A4:AC6', '#000000'));
+  reqs.push(rowHeightReq(S, 4, 6, 26));
+
+  const FIRST_A = FIRST_A_DATA_ROW, LAST_A = FIRST_A_DATA_ROW + 3;
+  const totalRef = q1(VILLAGE_INFO_SHEET) + '!$B$' + VILLAGE_INFO_ROW.kutumbTotal;
+  const mandayGrandRef = q1(ENTRY_SHEET) + '!$B$' + SUMMARY_MANDAY_ROW;
+  for (let r = FIRST_A; r <= LAST_A; r++) {
+    const row = [];
+    for (let c = 1; c <= 29; c++) row.push(0);
+    if (r === FIRST_A) {
+      row[0] = 1;
+      row[1] = '=' + q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.gav;
+    } else { row[0] = ''; row[1] = ''; }
+    MONTHS.forEach(m => {
+      const c = monthCols[m];
+      if (r === FIRST_A && SHEET_EXCLUDED_MONTHS.indexOf(m) === -1) {
+        const pct = SHEET_MONTH_PERCENT[m];
+        row[c - 1] = '=ROUND(' + totalRef + '*' + (pct / 100) + ',0)';
+        row[c] = '=($AB$' + r + '*' + pct + '%)';
+      }
+    });
+    if (r === FIRST_A) {
+      row[26] = '=' + totalRef;
+      row[27] = '=' + mandayGrandRef;
+      row[28] = '=ROUND($AB$' + r + '*' + wage + ',0)';
+    }
+    put(A_SHEET, 'A' + r + ':AC' + r, [row]);
+  }
+  MONTHS.forEach(m => {
+    const c = monthCols[m];
+    reqs.push(styleReq(S, colLet(c) + FIRST_A + ':' + colLet(c) + LAST_A, { nf: '#,##0', size: 11 }));
+    reqs.push(styleReq(S, colLet(c + 1) + FIRST_A + ':' + colLet(c + 1) + LAST_A, { nf: '#,##0.00', size: 11 }));
+  });
+  reqs.push(styleReq(S, 'AA' + FIRST_A + ':AA' + LAST_A, { nf: '#,##0', bold: true }));
+  reqs.push(styleReq(S, 'AB' + FIRST_A + ':AB' + LAST_A, { nf: '#,##0.00', bold: true }));
+  reqs.push(styleReq(S, 'AC' + FIRST_A + ':AC' + LAST_A, { nf: '#,##0' }));
+  reqs.push(borderReq(S, 'A' + FIRST_A + ':AC' + LAST_A, GRID));
+
+  const totalRow = LAST_A + 1;
+  put(A_SHEET, 'A' + totalRow, [['एकुण']]);
+  const totRow = [];
+  for (let c = 3; c <= 29; c++) { const L = colLet(c); totRow.push('=SUM(' + L + FIRST_A + ':' + L + LAST_A + ')'); }
+  put(A_SHEET, 'C' + totalRow + ':AC' + totalRow, [totRow]);
+  reqs.push(styleReq(S, 'A' + totalRow + ':AC' + totalRow, { bold: true }));
+  reqs.push(colWidthReq(S, 1, 1, px(8)), colWidthReq(S, 2, 2, px(20)), colWidthReq(S, 3, 29, 60));
+  reqs.push(freezeReq(S, 6));
+
+  return { reqs, data };
+}
+
+function villageFileName(v) { return 'गाव-' + v.jilha + '-' + v.taluka + '-' + v.gav + '-' + v.saal; }
+function driveQ(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+async function driveFindFirst(q) {
+  const r = await gapi(DRIVE_API + '/files?q=' + encodeURIComponent(q) + '&fields=' + encodeURIComponent('files(id,name,createdTime)') + '&pageSize=10&orderBy=createdTime&spaces=drive');
+  return (r && r.files && r.files[0]) || null;
+}
+async function getVillageFolderId() {
+  const f = await driveFindFirst("mimeType='application/vnd.google-apps.folder' and name='" + driveQ(VILLAGE_FOLDER_NAME) + "' and trashed=false");
+  if (f) return f.id;
+  const c = await gapi(DRIVE_API + '/files?fields=id', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: VILLAGE_FOLDER_NAME, mimeType: 'application/vnd.google-apps.folder' }) });
+  return c.id;
+}
+function sheetsValuesUrl(id, range, extra) { return SHEETS_API + '/' + id + '/values/' + encodeURIComponent(range) + (extra || ''); }
+
+async function buildVillageSpreadsheet(id, v) {
+  const meta = await gapi(SHEETS_API + '/' + id + '?fields=sheets.properties.sheetId');
+  const oldIds = (meta.sheets || []).map(s => s.properties.sheetId);
+  const spec = buildVillageSheetSpec(v, wageRate);
+  const mk = (sid, title, cols) => ({ addSheet: { properties: { sheetId: sid, title, gridProperties: { rowCount: 1000, columnCount: cols } } } });
+  const structure = [
+    { updateSpreadsheetProperties: { properties: { locale: 'en_US', timeZone: 'Asia/Kolkata' }, fields: 'locale,timeZone' } },
+    mk(SID_INFO, VILLAGE_INFO_SHEET, 10), mk(SID_ENTRY, ENTRY_SHEET, 30), mk(SID_A, A_SHEET, 30)
+  ].concat(oldIds.map(sid => ({ deleteSheet: { sheetId: sid } })));
+  await gapi(SHEETS_API + '/' + id + ':batchUpdate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ requests: structure.concat(spec.reqs) }) });
+  await gapi(SHEETS_API + '/' + id + '/values:batchUpdate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: spec.data }) });
+}
+
+function parseQtyFromDisplay(text) {
+  if (text === null || text === undefined || text === '') return 0;
+  const m = String(text).match(/[\d.]+/);
+  return m ? Number(m[0]) : 0;
+}
+function parseUnitFromDisplay(text) {
+  if (!text) return '';
+  const m = String(text).trim().match(/^[\d.]+\s*(.*)$/);
+  return m ? m[1] : '';
+}
+/** आधीचं (Apps Script मधील) findAppendRow — शक्य असल्यास सार्वजनिक व वैयक्तिक काम एकाच रांगेत ठेवते */
+function findAppendRowIn(grid, kind, yantrana) {
+  const lastRow = Math.max(FIRST_DATA_ROW + grid.length - 1, FIRST_DATA_ROW);
+  const numRows = lastRow - FIRST_DATA_ROW + 1;
+  for (let i = 0; i < numRows; i++) {
+    const r = grid[i] || [];
+    const kindVal = kind === 'public' ? r[4] : r[12];
+    const gpVal = r[1], yantranaVal = r[2];
+    if (!kindVal && (!gpVal || yantranaVal === yantrana)) return FIRST_DATA_ROW + i;
+  }
+  return lastRow + 1;
+}
+/** आधीचं writeEntryToRow — रक्कम/मनुष्यदिन मास्टर यादीतील (Data-सूची) दर व टक्केवारीवरून काढते */
+function entryCellWrites(en, row, curB, curC) {
+  const w = WORKS.find(x => x.name === en.kaam) || null;
+  const qty = Number(en.parinam) || 0;
+  const unit = w ? (w.unit || '') : '';
+  const rate = w ? (Number(w.rate) || 0) : 0;
+  const unsk = w ? (Number(w.unskilled) || 0) : 0;
+  const sk = w ? (Number(w.skilled) || 0) : 0;
+  const div = w ? (Number(w.divisor) || 1) : 1;
+  const total = qty * rate;
+  const unskilledAmt = Math.round(total * unsk);
+  const skilledAmt = Math.round(total * sk);
+  const manday = div ? Math.round(unskilledAmt / div) : 0;
+  const qtyText = (qty || '') + ' ' + unit;
+  const out = [];
+  const sh = q1(ENTRY_SHEET) + '!';
+  if (!curB) out.push({ range: sh + 'B' + row, values: [[en.gp || '']] });
+  if (!curC) out.push({ range: sh + 'C' + row, values: [[en.yantrana || '']] });
+  if (en.kind === 'public') {
+    out.push({ range: sh + 'D' + row + ':K' + row, values: [[en.upchar || '', en.kaam || '', qtyText, unskilledAmt, skilledAmt, Number(en.itar) || 0, Math.round(total), manday]] });
+  } else {
+    out.push({ range: sh + 'L' + row + ':U' + row, values: [[en.kutumb || '', en.kaam || '', en.labharthi || '', en.jat || '', qtyText, unskilledAmt, skilledAmt, Number(en.itar) || 0, Math.round(total), manday]] });
+  }
+  return out;
+}
+async function valuesWrite(id, data) {
+  if (!data.length) return;
+  await gapi(SHEETS_API + '/' + id + '/values:batchUpdate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ valueInputOption: 'RAW', data }) });
+}
+async function valuesRead(id, range) {
+  const r = await gapi(sheetsValuesUrl(id, range, '?valueRenderOption=UNFORMATTED_VALUE&majorDimension=ROWS'));
+  return (r && r.values) || [];
+}
+
+const UserDrive = {
+  _cache: {}, _chain: Promise.resolve(),
+  /** सर्व कामे एकापाठोपाठ एक चालतात — त्यामुळे एकाच गावाची दोन शीट चुकून बनत नाहीत */
+  _enqueue(fn) {
+    const run = this._chain.then(async () => {
+      try { return await fn(); }
+      catch (e) {
+        // वापरकर्त्याने Drive मधून शीट स्वतः हटवली असेल (404) तर साठवलेला ID विसरून एकदा पुन्हा प्रयत्न
+        if (/\(404\)/.test(String(e && e.message))) { this._cache = {}; return await fn(); }
+        throw e;
+      }
+    });
+    this._chain = run.catch(() => {});
+    return run;
+  },
+  _key(v) { return [v.jilha, v.taluka, v.gav, v.saal].join('|'); },
+  _owner() { return Auth.getEmail(); },
+  async _find(v) {
+    const k = this._owner() + '|' + this._key(v);
+    if (this._cache[k]) return this._cache[k];
+    const f = await driveFindFirst("mimeType='application/vnd.google-apps.spreadsheet' and name='" + driveQ(villageFileName(v)) + "' and trashed=false");
+    if (f) this._cache[k] = f.id;
+    return f ? f.id : null;
+  },
+  async _ensure(v) {
+    const found = await this._find(v);
+    if (found) return { id: found, isNew: false };
+    const folderId = await getVillageFolderId();
+    const file = await gapi(DRIVE_API + '/files?fields=id', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: villageFileName(v), mimeType: 'application/vnd.google-apps.spreadsheet', parents: [folderId] }) });
+    try { await buildVillageSpreadsheet(file.id, v); }
+    catch (e) { try { await gapi(DRIVE_API + '/files/' + file.id, { method: 'DELETE' }); } catch (_) {} throw e; }
+    this._cache[this._owner() + '|' + this._key(v)] = file.id;
+    return { id: file.id, isNew: true };
+  },
+  /** (गेटवर) या गावाचा/वर्षाचा डेटा वापरकर्त्याच्या Drive मध्ये आधीपासून असेल तर वाचते — नसेल तर शीट तयार करत नाही */
+  readVillage(v) {
+    return this._enqueue(async () => {
+      const id = await this._find(v);
+      if (!id) return { exists: false, kutumbTotal: 0, entries: [] };
+      const info = await valuesRead(id, q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.kutumbTotal);
+      const kutumbTotal = Number(info[0] && info[0][0]) || 0;
+      const values = await valuesRead(id, q1(ENTRY_SHEET) + '!A' + FIRST_DATA_ROW + ':AA' + LAST_DATA_ROW);
+      const out = [];
+      for (let i = 0; i < BLANK_ROWS; i++) {
+        const r = values[i] || [];
+        const row = FIRST_DATA_ROW + i;
+        const gp = r[1], yantrana = r[2], upchar = r[3], publicName = r[4], indivName = r[12];
+        if (!publicName && !indivName) continue;
+        if (publicName) {
+          out.push({ row, kind: 'public', gp, yantrana, upchar, kaam: publicName,
+            parinam: parseQtyFromDisplay(r[5]), unit: parseUnitFromDisplay(r[5]),
+            unskilled: r[6] || 0, skilled: r[7] || 0, itar: r[8] || 0, ekuun: r[9] || 0, manday: r[10] || 0 });
+        }
+        if (indivName) {
+          out.push({ row, kind: 'individual', gp, yantrana, kutumb: r[11], kaam: r[12], labharthi: r[13], jat: r[14],
+            parinam: parseQtyFromDisplay(r[15]), unit: parseUnitFromDisplay(r[15]),
+            unskilled: r[16] || 0, skilled: r[17] || 0, itar: r[18] || 0, ekuun: r[19] || 0, manday: r[20] || 0 });
+        }
+      }
+      return { exists: true, kutumbTotal, entries: out };
+    });
+  },
+  /** नवीन नोंदी जोडते (शीट नसेल तर वापरकर्त्याच्या Drive मध्ये तयार करते) — प्रत्येक नोंदीचा row परत देते */
+  appendEntries(v, list) {
+    return this._enqueue(async () => {
+      const ens = await this._ensure(v);
+      const grid = await valuesRead(ens.id, q1(ENTRY_SHEET) + '!A' + FIRST_DATA_ROW + ':M');
+      const rows = [], writes = [];
+      list.forEach(en => {
+        const row = findAppendRowIn(grid, en.kind, en.yantrana);
+        rows.push(row);
+        const gi = row - FIRST_DATA_ROW;
+        while (grid.length <= gi) grid.push([]);
+        const cur = grid[gi];
+        while (cur.length < 13) cur.push('');
+        writes.push.apply(writes, entryCellWrites(en, row, cur[1], cur[2]));
+        if (!cur[1]) cur[1] = en.gp || ''; if (!cur[2]) cur[2] = en.yantrana || '';
+        if (en.kind === 'public') cur[4] = en.kaam || ''; else cur[12] = en.kaam || '';
+      });
+      await valuesWrite(ens.id, writes);
+      return { rows, isNew: ens.isNew };
+    });
+  },
+  editEntry(v, row, en) {
+    return this._enqueue(async () => {
+      const ens = await this._ensure(v);
+      const cur = (await valuesRead(ens.id, q1(ENTRY_SHEET) + '!B' + row + ':C' + row))[0] || [];
+      await valuesWrite(ens.id, entryCellWrites(en, row, cur[0], cur[1]));
+      return { isNew: ens.isNew };
+    });
+  },
+  /** एका बाजूचा (सार्वजनिक/वैयक्तिक) डेटा वगळते; दोन्ही बाजू रिकाम्या झाल्यासच गाव/यंत्रणा साफ करते */
+  deleteEntry(v, row, kind) {
+    return this._enqueue(async () => {
+      const ens = await this._ensure(v);
+      const sh = q1(ENTRY_SHEET) + '!';
+      const data = kind === 'public'
+        ? [{ range: sh + 'D' + row + ':K' + row, values: [['', '', '', '', '', '', '', '']] }]
+        : [{ range: sh + 'L' + row + ':U' + row, values: [['', '', '', '', '', '', '', '', '', '']] }];
+      const cur = (await valuesRead(ens.id, sh + 'B' + row + ':U' + row))[0] || [];
+      const stillPublic = kind === 'public' ? '' : cur[3];   // E = B+3
+      const stillIndiv = kind === 'public' ? cur[11] : '';  // M = B+11
+      if (!stillPublic && !stillIndiv) data.push({ range: sh + 'B' + row + ':C' + row, values: [['', '']] });
+      await valuesWrite(ens.id, data);
+      return { isNew: ens.isNew };
+    });
+  },
+  writeKutumb(v, total) {
+    return this._enqueue(async () => {
+      const ens = await this._ensure(v);
+      await valuesWrite(ens.id, [{ range: q1(VILLAGE_INFO_SHEET) + '!B' + VILLAGE_INFO_ROW.kutumbTotal, values: [[Number(total) || 0]] }]);
+      return { isNew: ens.isNew };
+    });
+  }
+};
+
+// ===================== (v9) लॉगिन स्क्रीन / वापरकर्ता बदल =====================
+let appStarted = false;
+function updateUserChips(email) {
+  [['userRowGate', 'userEmailGate'], ['userChipApp', 'userEmailApp']].forEach(p => {
+    const row = document.getElementById(p[0]), em = document.getElementById(p[1]);
+    if (em) em.textContent = email || '';
+    if (row) row.style.display = email ? '' : 'none';
+  });
+}
+function showLoginScreen(msg) {
+  const scr = document.getElementById('loginScreen');
+  if (scr) scr.style.display = 'flex';
+  const err = document.getElementById('loginErr');
+  if (err) { if (msg) { err.textContent = msg; err.style.display = 'block'; } else { err.style.display = 'none'; } }
+}
+async function initAuth() {
+  Auth.onAuthLost = () => showLoginScreen('लॉगिन सत्र संपले — पुन्हा Google ने लॉगिन करा. (न पाठवलेला डेटा सुरक्षित आहे, लॉगिन होताच आपोआप पाठवला जाईल.)');
+  showLoginScreen('');
+  const u = await Auth.silentSignIn();
+  if (u) await onSignedIn(u);
+}
+async function signInUser() {
+  const btn = document.getElementById('loginBtn');
+  if (btn) btn.disabled = true;
+  try {
+    const u = await Auth.signIn();
+    await onSignedIn(u);
+  } catch (e) {
+    showLoginScreen(e && e.message ? e.message : String(e));
+  } finally { if (btn) btn.disabled = false; }
+}
+/** लॉगिन झाल्यावर: वेगळ्या खात्याने लॉगिन केल्यास या डिव्हाइसवरचा आधीच्या खात्याचा स्थानिक डेटा काढून टाकते,
+ * म्हणजे एका वापरकर्त्याचा डेटा चुकून दुसऱ्याच्या Drive मध्ये जात नाही */
+async function onSignedIn(user) {
+  let prev = '';
+  try { const r = await window.storage.get('owner_email', false); prev = (r && r.value) || ''; } catch (e) {}
+  const changed = !!prev && prev !== user.email;
+  if (changed) {
+    const pending = entries.filter(e => !e.synced).length;
+    if (pending > 0 && !confirm('आधीच्या खात्याच्या (' + prev + ') ' + pending + ' नोंदी अजून पाठवलेल्या नाहीत. वेगळ्या खात्याने लॉगिन केल्यास त्या काढून टाकल्या जातील.\n\nपुढे जायचे का?')) {
+      Auth.signOut(); updateUserChips(''); showLoginScreen('लॉगिन रद्द केले — आधीच्याच खात्याने लॉगिन करा.');
+      return;
+    }
+  }
+  document.getElementById('loginScreen').style.display = 'none';
+  updateUserChips(user.email);
+  ActivityLog.add('login', 'लॉगिन (' + (/Android/i.test(navigator.userAgent) ? 'मोबाइल' : 'PC') + ')', null);
+  try { await window.storage.set('owner_email', user.email, false); } catch (e) {}
+  if (!appStarted) {
+    appStarted = true;
+    if (changed) await doClearAndReset(); else await loadVillage();
+  } else if (changed) {
+    await doClearAndReset();
+  } else {
+    retryPendingSync();
+  }
+}
+async function signOutUser() {
+  const pending = entries.filter(e => !e.synced);
+  if (pending.length > 0) {
+    showToast('लॉगआउट करण्यापूर्वी डेटा सेव्ह करत आहे...');
+    const ok = await pushEntriesToSheet(pending);
+    if (ok) { pending.forEach(e => e.synced = true); persist(); }
+    else if (!confirm(pending.length + ' नोंदी तुमच्या Drive मध्ये पाठवता आल्या नाहीत (' + lastSyncError + ').\n\nतरीही लॉगआउट करून त्या काढून टाकायच्या का?')) return;
+  }
+  ActivityLog.add('logout', 'लॉगआउट');
+  await ActivityLog.flush();
+  Auth.signOut();
+  try { await window.storage.set('owner_email', '', false); } catch (e) {}
+  updateUserChips('');
+  await doClearAndReset();
+  showLoginScreen('');
+}
+
+// ===================== एकदाच सेट करायची Google Sheet लिंक =====================
+const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbzdcxKVDkdfrorO0_f88kSNZq4VcCZ8AUN2ejeFs2shQKugG6oWwE7NvQ_2U9fqBat8Sg/exec';
+// GS फाईलमधल्या SCRIPT_VERSION शी जुळणारा आकडा — जुळत नसेल तर विकसकाने कोड बदलल्यानंतर
+// "Deploy → Manage deployments → New version → Deploy" द्यायचं राहिलं आहे असं समजायचं
+const EXPECTED_SCRIPT_VERSION = 9;
+let versionMismatchWarned = false;
+let GS_URL = DEFAULT_GS_URL;
+
+/** सुरुवातीला — विकसकाने सेटिंग्जमध्ये आधी जतन केलेली URL असल्यास ती वापरा, नाहीतर कोडमधली DEFAULT_GS_URL */
+async function loadGSUrl() {
+  try {
+    const r = await window.storage.get('gs_url', false);
+    GS_URL = (r && r.value) ? r.value : DEFAULT_GS_URL;
+  } catch (e) { GS_URL = DEFAULT_GS_URL; }
+  const inputEl = document.getElementById('gsUrlInput');
+  if (inputEl) inputEl.value = GS_URL || '';
+}
+
+async function saveGSUrl() {
+  const val = document.getElementById('gsUrlInput').value.trim();
+  const okEl = document.getElementById('gsUrlOk'), errEl = document.getElementById('gsUrlErr');
+  okEl.style.display = 'none'; errEl.style.display = 'none';
+  GS_URL = val;
+  try { await window.storage.set('gs_url', GS_URL, false); } catch (e) {}
+  if (!GS_URL) { errEl.textContent = 'URL रिकामी आहे — Sheet सिंक बंद राहील.'; errEl.style.display = 'block'; return; }
+  clearGsCache();
+  const result = await refreshListsFromSheet(true);
+  if (result && result.ok) {
+    if (result.workCount > 0) {
+      okEl.textContent = `जोडणी यशस्वी ✓ — Data-सूची मधून ${result.workCount} कामे मिळाली`;
+    } else {
+      okEl.textContent = 'जोडणी यशस्वी ✓ — पण "Data-सूची" पानावर अजून एकही काम भरलेलं नाही. आधी तिथे कामांची यादी भरा.';
+    }
+    okEl.style.display = 'block';
+    if (!currentGP) loadDistrictsIntoGate();
+  } else {
+    errEl.textContent = 'जोडणी अयशस्वी: ' + (result ? result.error : 'अज्ञात त्रुटी') +
+      '\n\nतपासा: (१) URL शेवटी /exec आहे का, (२) Deploy → Manage deployments मध्ये "Who has access: Anyone" आहे का, (३) कोड बदलल्यानंतर "New version" देऊन पुन्हा Deploy केलं आहे का.';
+    errEl.style.display = 'block';
+  }
+}
+
+// टीप: ही यादी मुद्दाम रिकामी आहे — मूळ नमुना फाईलमधली कामे फक्त उदाहरणादाखल
+// (माहितीसाठी) होती. प्रत्यक्ष कामांची यादी Google Sheet च्या "Data-सूची" पानातून
+// आपोआप येते (खाली पाहा refreshListsFromSheet). जोडणी होईपर्यंत यादी रिकामी दिसेल.
+let WORKS = [];
+let YANTRANA = ['ग्रामपंचायत यंत्रणा', 'शासकीय यंत्रणा'];
+let UPCHAR = ['माथा ते पायथा उपचार', 'गाव विकासाची कामे', 'शाळा व अंगणवाडी कामे', 'आरोग्य व स्वच्छता', 'अभिसरण अंतर्गत कामे'];
+let KUTUMB = ['मजुर कुटूंब', 'शेतकरी लाभार्थी', 'व्यावसायिक लाभार्थी', 'इतर लाभार्थी'];
+let JAT = ['खुला', 'ओबीसी', 'अनुसूचित जाती', 'अनुसूचित जमाती'];
+
+let entries = [];
+let editingId = null; // सध्या संपादित होत असलेल्या नोंदीचा id (null = नवीन नोंद मोड)
+let gateExistingEntries = null; // गेट-स्क्रीनवर सापडलेला आधीचा गावाचा डेटा (निश्चित केल्यावर लोड होतो)
+
+// ===================== सन (आर्थिक वर्ष) — मागील/चालू/पुढील, नेहमी एकाच स्वरूपात =====================
+function toDevanagariDigits_(n) {
+  const map = ['०','१','२','३','४','५','६','७','८','९'];
+  return String(n).split('').map(ch => (ch >= '0' && ch <= '9') ? map[ch.charCodeAt(0)-48] : ch).join('');
+}
+/** भारतीय आर्थिक वर्ष एप्रिल-मार्च — offset=0 म्हणजे चालू वर्ष, -1 मागील, +1 पुढील */
+function financialYearLabel_(offset) {
+  const today = new Date();
+  let startYear = today.getFullYear();
+  if (today.getMonth() < 3) startYear -= 1; // जानेवारी-मार्च असल्यास मागील एप्रिलपासून सुरू झालेलं वर्ष चालू आहे
+  startYear += (offset || 0);
+  return toDevanagariDigits_(startYear) + ' - ' + toDevanagariDigits_(startYear + 1);
+}
+function populateGateSaalOptions() {
+  const sel = document.getElementById('gateSaal');
+  if (!sel) return;
+  const prevVal = sel.value;
+  sel.innerHTML = '';
+  [[-1, 'मागील वर्ष'], [0, 'चालू वर्ष'], [1, 'पुढील वर्ष']].forEach(([offset, label]) => {
+    const yr = financialYearLabel_(offset);
+    const opt = document.createElement('option');
+    opt.value = yr;
+    opt.textContent = label + ' (' + yr + ')';
+    sel.appendChild(opt);
+  });
+  // आधी काही निवडलं असेल (त्याच यादीत) तर तेच ठेवा, नाहीतर डीफॉल्ट "चालू वर्ष"
+  const match = Array.from(sel.options).find(o => o.value === prevVal);
+  sel.value = match ? prevVal : financialYearLabel_(0);
+}
+
+// ===================== ॲपची लिंक ब्राउझरमध्ये उघडा / शेअर करा (मोबाईल APK मध्ये उपयोगी) =====================
+function openBrowserModal() {
+  const url = PUBLIC_WEB_URL || window.location.href;
+  document.getElementById('browserModalUrl').value = url;
+  document.getElementById('openBrowserAnchor').href = url;
+  document.getElementById('browserCopyOk').style.display = 'none';
+  const shareBtn = document.getElementById('shareBrowserBtn');
+  shareBtn.style.display = (navigator.share) ? '' : 'none';
+  document.getElementById('browserModalOverlay').classList.add('show');
+}
+function closeBrowserModal() {
+  document.getElementById('browserModalOverlay').classList.remove('show');
+}
+async function copyBrowserLink() {
+  const url = document.getElementById('browserModalUrl').value;
+  const okEl = document.getElementById('browserCopyOk');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const inp = document.getElementById('browserModalUrl');
+      inp.select(); inp.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+    }
+    okEl.style.display = 'block';
+  } catch (e) { showToast('कॉपी करता आली नाही — लिंक निवडून स्वतः कॉपी करा'); }
+}
+async function shareBrowserLink() {
+  const url = document.getElementById('browserModalUrl').value;
+  if (!navigator.share) { showToast('या ब्राउझर/ॲपमध्ये शेअर सुविधा उपलब्ध नाही — कॉपी करा वापरा'); return; }
+  try { await navigator.share({ title: 'समृद्धी काम नोंदणी अ‍ॅप', url: url }); }
+  catch (e) { /* वापरकर्त्याने शेअर रद्द केलं असेल तर काही करायची गरज नाही */ }
+}
+
+// ===================== सुरक्षा — गाव-पासवर्ड व ॲडमिन लॉगिन =====================
+let currentVillagePassword = ''; // या गावासाठी वापरलेला/सेट केलेला पासवर्ड — प्रत्येक सिंक-कॉलसोबत पाठवला जातो
+let currentAdminPassword = '';   // ॲडमिन लॉगिन झाल्यास तो पासवर्ड (चालू सत्रापुरता, कायमचा साठवला जात नाही)
+let isAdmin = false;
+
+function setAdminUI(on) {
+  isAdmin = on;
+  const st = document.getElementById('settingsTab');
+  if (st) st.style.display = on ? '' : 'none';
+  const gateStatus = document.getElementById('adminStatusGate');
+  if (gateStatus) gateStatus.style.display = on ? 'inline' : 'none';
+  const appStatus = document.getElementById('adminStatusApp');
+  if (appStatus) appStatus.style.display = on ? 'inline' : 'none';
+}
+
+/** ॲडमिन पासवर्ड विचारून सर्व्हरकडे तपासते — बरोबर असल्यास सेटिंग्ज टॅब दिसू लागतो व
+ * कोणत्याही गावाचा आराखडा (पासवर्डशिवाय) उघडता/बदलता येतो */
+async function adminLogin() {
+  if (isAdmin) { showToast('तुम्ही आधीच ॲडमिन म्हणून लॉगिन आहात'); return; }
+  const pwd = window.prompt('ॲडमिन पासवर्ड टाका:');
+  if (pwd === null) return;
+  if (!GS_URL) { showToast('आधी Google Sheet जोडणी आवश्यक आहे'); return; }
+  try {
+    const res = await fetch(GS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'checkAdmin', password: pwd })
+    });
+    const data = await res.json();
+    if (data.ok && data.isAdmin) {
+      currentAdminPassword = pwd;
+      setAdminUI(true);
+      ActivityLog.add('admin_login', 'ॲडमिन लॉगिन', null);
+      showToast('ॲडमिन लॉगिन यशस्वी ✓');
+    } else {
+      showToast('पासवर्ड चुकीचा आहे');
+    }
+  } catch (e) { showToast('तपासणी अयशस्वी: ' + (e && e.message ? e.message : e)); }
+}
+
+/** गेटवर "निश्चित करा" दाबल्यावर — या गावाचा आराखडा बदलण्याची परवानगी आहे का ते सर्व्हरकडे तपासते.
+ * ॲडमिन लॉगिन असल्यास पासवर्डशिवायही परवानगी मिळते. नवीन गावासाठी दिलेला पासवर्ड कायमचा साठवला जातो. */
+async function checkVillageAccess(jilha, taluka, gav, password) {
+  if (!GS_URL) return { granted: false, error: 'Google Sheet जोडलेली नाही.' };
+  try {
+    const res = await fetch(GS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'villageAccess', village: { jilha, taluka, gav }, password, adminPassword: currentAdminPassword })
+    });
+    const data = await res.json();
+    if (!data.ok) return { granted: false, error: data.error || 'तपासणी अयशस्वी' };
+    return { granted: !!data.granted, error: data.error };
+  } catch (e) { return { granted: false, error: 'तपासणी अयशस्वी: ' + (e && e.message ? e.message : e) }; }
+}
+
+/** देवनागरी (मराठी) गावाच्या नावावरून डीफॉल्ट पासवर्डचा अंदाज दाखवण्यासाठी — सर्व्हरवरील
+ * transliterateMarathiToEnglish_() या फंक्शनसारखीच पद्धत (हुबेहूब जुळेलच असं नाही, फक्त सूचनेसाठी) */
+function guessDefaultPasswordClient_(text) {
+  if (!text) return '';
+  const independentVowels = { 'अ':'a','आ':'aa','इ':'i','ई':'ee','उ':'u','ऊ':'oo','ऋ':'ri','ए':'e','ऐ':'ai','ओ':'o','औ':'au' };
+  const matras = { 'ा':'aa','ि':'i','ी':'ee','ु':'u','ू':'oo','ृ':'ri','े':'e','ै':'ai','ो':'o','ौ':'au' };
+  const consonants = {
+    'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ng','च':'ch','छ':'chh','ज':'j','झ':'jh','ञ':'ny',
+    'ट':'t','ठ':'th','ड':'d','ढ':'dh','ण':'n','त':'t','थ':'th','द':'d','ध':'dh','न':'n',
+    'प':'p','फ':'ph','ब':'b','भ':'bh','म':'m','य':'y','र':'r','ल':'l','व':'v',
+    'श':'sh','ष':'sh','स':'s','ह':'h','ळ':'l'
+  };
+  const VIRAMA = '्', ANUSVARA = 'ं', CHANDRABINDU = 'ँ', VISARGA = 'ः';
+  let out = '', i = 0; const n = text.length;
+  while (i < n) {
+    const ch = text[i];
+    if (consonants[ch]) {
+      out += consonants[ch];
+      const next = text[i + 1];
+      if (next === VIRAMA) { i += 2; continue; }
+      if (next && matras[next]) { out += matras[next]; i += 2; continue; }
+      if (next === ANUSVARA || next === CHANDRABINDU) { out += 'an'; i += 2; continue; }
+      if (next === VISARGA) { out += 'ah'; i += 2; continue; }
+      out += 'a'; i += 1; continue;
+    }
+    if (independentVowels[ch]) { out += independentVowels[ch]; i += 1; continue; }
+    if (ch === ANUSVARA || ch === CHANDRABINDU) { out += 'n'; i += 1; continue; }
+    if (ch === VISARGA) { out += 'h'; i += 1; continue; }
+    if (ch === VIRAMA) { i += 1; continue; }
+    if (ch === ' ' || ch === '-' || ch === '_') { i += 1; continue; }
+    if (/[a-zA-Z0-9]/.test(ch)) { out += ch; i += 1; continue; }
+    i += 1;
+  }
+  if (out.length > 1 && out.charAt(out.length - 1) === 'a' && out.charAt(out.length - 2) !== 'a') out = out.slice(0, -1);
+  if (!out) return '';
+  return out.charAt(0).toUpperCase() + out.slice(1) + '123';
+}
+function updateGatePasswordHint() {
+  const gp = document.getElementById('gateGP').value;
+  const hintEl = document.getElementById('gatePasswordHint');
+  if (!hintEl) return;
+  if (!gp || gp === '__new__') { hintEl.style.display = 'none'; return; }
+  const guess = guessDefaultPasswordClient_(gp);
+  hintEl.textContent = guess ? ('डीफॉल्ट पासवर्ड साधारण असा असेल: ' + guess + ' (आधी ॲडमिनने बदलला नसेल तरच)') : '';
+  hintEl.style.display = guess ? 'block' : 'none';
+}
+
+async function adminResetVillagePasswordUI() {
+  const okEl = document.getElementById('rstOk'), errEl = document.getElementById('rstErr');
+  okEl.style.display = 'none'; errEl.style.display = 'none';
+  const jilha = document.getElementById('rstJilha').value.trim();
+  const taluka = document.getElementById('rstTaluka').value.trim();
+  const gav = document.getElementById('rstGav').value.trim();
+  const newPassword = document.getElementById('rstNewPwd').value.trim();
+  if (!jilha || !taluka || !gav || !newPassword) { errEl.textContent = 'सर्व माहिती भरा.'; errEl.style.display = 'block'; return; }
+  try {
+    const res = await fetch(GS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'adminResetVillagePassword', village: { jilha, taluka, gav }, newPassword, adminPassword: currentAdminPassword })
+    });
+    const data = await res.json();
+    if (data.ok) { okEl.style.display = 'block'; document.getElementById('rstNewPwd').value = ''; ActivityLog.add('password_reset', 'गावाचा पासवर्ड रिसेट केला', { jilha, taluka, gav }); }
+    else { errEl.textContent = data.error || 'रिसेट अयशस्वी'; errEl.style.display = 'block'; }
+  } catch (e) { errEl.textContent = 'रिसेट अयशस्वी: ' + (e && e.message ? e.message : e); errEl.style.display = 'block'; }
+}
+let gateExistingKutumb = 0;
+let currentGP = '';
+let currentJilha = '';
+let currentTaluka = '';
+let currentSaal = '';
+let kutumbTotalCount = 0;
+const MONTHS = ['एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोंबर','नोव्हेंबर','डिसेंबर','जानेवारी','फेब्रुवारी','मार्च'];
+const EXCLUDED_MONTHS = ['जुलै','ऑगस्ट']; // पावसाळी हंगाम — नमुना फाईलनुसार या महिन्यांत कामे गृहीत धरली जात नाहीत
+// नमुना फाईलमधील "प्रपत्र- अ" चे तेच मूळ सूत्र — महिना-निहाय मनुष्यदिन ही एकुण मनुष्यदिनाची ठराविक टक्केवारी असते
+const MONTH_PERCENT = { 'एप्रिल':10, 'मे':11, 'जून':12, 'जुलै':0, 'ऑगस्ट':0, 'सप्टेंबर':8, 'ऑक्टोंबर':9, 'नोव्हेंबर':10, 'डिसेंबर':11, 'जानेवारी':10, 'फेब्रुवारी':9, 'मार्च':10 };
+
+// ===================== योजनेचे नाव / लोगो / माहिती (Google Sheet च्या "App-सेटअप" पानावरून येते) =====================
+const DEFAULT_SCHEME_NAME = 'विकसित भारत - रोजगार आणि उपजीविका हमी अभियान - ग्रामीण (VB–GRAMG)';
+let schemeName = DEFAULT_SCHEME_NAME;
+let logoUrl = '';
+let devInfo = '';
+let appInfo = '';
+let wageRate = 297; // प्रति मनुष्यदिन ₹ — Sheet A च्या "मुल्य" स्तंभासाठी; केंद्रीय-सेटअप वरून अद्ययावत होते
+
+/** केंद्रीय-सेटअप मध्ये टाकलेली लोगोची लिंक बऱ्याचदा Google Drive ची सामान्य "शेअर" लिंक असते
+ * (उदा. https://drive.google.com/file/d/XXXX/view?usp=sharing) — अशी लिंक थेट चित्र म्हणून उघडत
+ * नाही, त्यामुळे ॲपमध्ये व Excel मध्ये लोगो दिसत नाही. इथे अशा लिंकमधून फाईल-ID काढून तिचं
+ * थेट-चित्र स्वरूपात रूपांतर आपोआप केलं जातं, जेणेकरून वेगळं काही न करता (फाईल "कोणीही लिंकसह
+ * पाहू शकतो" अशी शेअर केलेली असेल तर) लोगो दोन्हीकडे व्यवस्थित दिसेल. */
+function normalizeLogoUrl_(url) {
+  if (!url) return url;
+  url = String(url).trim();
+  let fileId = '';
+  let m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) fileId = m[1];
+  if (!fileId) { m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/); if (m) fileId = m[1]; }
+  if (!fileId) { m = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/); if (m) fileId = m[1]; }
+  if (fileId) return 'https://lh3.googleusercontent.com/d/' + fileId;
+  return url; // आधीच थेट-चित्र लिंक (GitHub raw, imgur इ.) असेल तर जशीच्या तशी वापरा
+}
+
+function applyBranding() {
+  document.getElementById('schemeNameLine').textContent = schemeName || DEFAULT_SCHEME_NAME;
+  const topLogo = document.getElementById('topbarLogo');
+  const gateLogoWrap = document.getElementById('gateLogoWrap');
+  const gateLogoImg = document.getElementById('gateLogoImg');
+  if (logoUrl) {
+    const src = normalizeLogoUrl_(logoUrl);
+    topLogo.src = src; topLogo.style.display = 'inline-block';
+    gateLogoImg.src = src; gateLogoWrap.style.display = 'flex';
+  } else {
+    topLogo.style.display = 'none'; gateLogoWrap.style.display = 'none';
+  }
+  const card = document.getElementById('infoCard');
+  const schemeP = document.getElementById('infoSchemeName');
+  const appP = document.getElementById('infoAppInfo');
+  const devP = document.getElementById('infoDevInfo');
+  schemeP.textContent = schemeName || DEFAULT_SCHEME_NAME;
+  if (appInfo) { appP.textContent = appInfo; appP.style.display = 'block'; } else { appP.style.display = 'none'; }
+  if (devInfo) { devP.textContent = 'विकसक: ' + devInfo; devP.style.display = 'block'; } else { devP.style.display = 'none'; }
+  card.style.display = 'block';
+}
+
+async function loadLocalBranding() {
+  try {
+    const l = await window.storage.get('logo_url', false);
+    logoUrl = l && l.value ? l.value : '';
+  } catch (e) { logoUrl = ''; }
+  applyBranding();
+}
+
+/** दिलेला महिना पावसाळी (वगळलेला) नाही अशा सक्रिय ९ महिन्यांपैकी कितव्या क्रमांकाचा आहे (1..9) — Excel export मधील सूत्रे Google Sheet च्या सूत्रांशी जुळण्यासाठी वापरतात */
+function activeMonthPosition(m) {
+  const activeMonths = MONTHS.filter(x => !EXCLUDED_MONTHS.includes(x));
+  return activeMonths.indexOf(m) + 1; // 1-based, EXCLUDED असल्यास 0
+}
+async function loadKutumbTotal() {
+  try {
+    const t = await window.storage.get('kutumb_total', false);
+    kutumbTotalCount = t && t.value ? parseInt(t.value) : 0;
+  } catch (e) { kutumbTotalCount = 0; }
+  const inputEl = document.getElementById('gateKutumbTotal');
+  if (inputEl && kutumbTotalCount) inputEl.value = kutumbTotalCount;
+}
+
+function fillSelect(id, options, placeholder) {
+  const el = document.getElementById(id);
+  el.innerHTML = '<option value="">' + (placeholder || 'निवडा') + '</option>';
+  options.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o; opt.textContent = o;
+    el.appendChild(opt);
+  });
+}
+
+function populateStaticDropdowns() {
+  fillSelect('pYantrana', YANTRANA);
+  fillSelect('pUpchar', UPCHAR);
+  fillSelect('iYantrana', YANTRANA);
+  fillSelect('iKutumb', KUTUMB);
+  fillSelect('iJat', JAT);
+  fillSelect('iKaam', WORKS.filter(w => w.type === 'वैयक्तिक').map(w => w.name));
+}
+
+function onPublicUpcharChange() {
+  const upchar = document.getElementById('pUpchar').value;
+  const sel = document.getElementById('pKaam');
+  if (!upchar) {
+    sel.innerHTML = '<option value="">आधी उपचार गट निवडा</option>';
+    sel.disabled = true;
+  } else {
+    const names = WORKS.filter(w => w.type === 'सार्वजनिक' && w.upchar === upchar).map(w => w.name);
+    fillSelect('pKaam', names);
+    sel.disabled = false;
+  }
+  document.getElementById('pUnit').textContent = '—';
+  calcPublic();
+}
+
+function onPublicKaamChange() {
+  const name = document.getElementById('pKaam').value;
+  const w = WORKS.find(x => x.name === name);
+  document.getElementById('pUnit').textContent = w ? w.unit : '—';
+  calcPublic();
+}
+
+function onIndivKaamChange() {
+  const name = document.getElementById('iKaam').value;
+  const w = WORKS.find(x => x.name === name);
+  document.getElementById('iUnit').textContent = w ? w.unit : '—';
+  calcIndiv();
+}
+
+function fmtMoney(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+function fmtNum(n) { return (Math.round(n * 100) / 100).toLocaleString('en-IN'); }
+
+function calcPublic() {
+  const name = document.getElementById('pKaam').value;
+  const qty = parseFloat(document.getElementById('pParimaan').value) || 0;
+  const itar = parseFloat(document.getElementById('pItar').value) || 0;
+  const w = WORKS.find(x => x.name === name);
+  if (!w) { setPublicOut(0,0,0,0); return null; }
+  const total = qty * w.rate;
+  const unskilled = total * w.unskilled;
+  const skilled = total * w.skilled;
+  const ekuun = unskilled + skilled + itar;
+  const manday = unskilled / w.divisor;
+  setPublicOut(unskilled, skilled, ekuun, manday);
+  return { w, qty, itar, unskilled, skilled, ekuun, manday };
+}
+function setPublicOut(u,s,e,m) {
+  document.getElementById('pUnskilled').textContent = fmtMoney(u);
+  document.getElementById('pSkilled').textContent = fmtMoney(s);
+  document.getElementById('pTotal').textContent = fmtMoney(e);
+  document.getElementById('pManday').textContent = fmtNum(m);
+}
+
+function calcIndiv() {
+  const name = document.getElementById('iKaam').value;
+  const qty = parseFloat(document.getElementById('iParimaan').value) || 0;
+  const itar = parseFloat(document.getElementById('iItar').value) || 0;
+  const w = WORKS.find(x => x.name === name);
+  if (!w) { setIndivOut(0,0,0,0); return null; }
+  const total = qty * w.rate;
+  const unskilled = total * w.unskilled;
+  const skilled = total * w.skilled;
+  const ekuun = unskilled + skilled + itar;
+  const manday = unskilled / w.divisor;
+  setIndivOut(unskilled, skilled, ekuun, manday);
+  return { w, qty, itar, unskilled, skilled, ekuun, manday };
+}
+function setIndivOut(u,s,e,m) {
+  document.getElementById('iUnskilled').textContent = fmtMoney(u);
+  document.getElementById('iSkilled').textContent = fmtMoney(s);
+  document.getElementById('iTotal').textContent = fmtMoney(e);
+  document.getElementById('iManday').textContent = fmtNum(m);
+}
+
+function isDuplicatePublic(yantrana, kaam, excludeId) {
+  return entries.some(e => e.id !== excludeId && e.kind === 'public' && e.yantrana === yantrana && e.kaam === kaam);
+}
+function isDuplicateIndividual(labharthi, kaam, excludeId) {
+  const lb = (labharthi || '').trim().toLowerCase();
+  return entries.some(e => e.id !== excludeId && e.kind === 'individual' && (e.labharthi || '').trim().toLowerCase() === lb && e.kaam === kaam);
+}
+
+function savePublic() {
+  const errEl = document.getElementById('pErr');
+  errEl.style.display = 'none';
+  const yantrana = document.getElementById('pYantrana').value;
+  const upchar = document.getElementById('pUpchar').value;
+  const kaam = document.getElementById('pKaam').value;
+  const calc = calcPublic();
+  if (!yantrana || !upchar || !kaam || !calc || !calc.qty) {
+    errEl.textContent = 'कृपया यंत्रणा, उपचार गट, कामाचे नाव व परिमाण भरा.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (isDuplicatePublic(yantrana, kaam, editingId)) {
+    errEl.textContent = 'हे काम या यंत्रणेत आधीच नोंदवलेले आहे — तेच काम दुसऱ्यांदा नोंदवता येणार नाही.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const fields = {
+    kind: 'public', gp: currentGP, yantrana, upchar, kaam,
+    kutumb:'', labharthi:'', jat:'',
+    unit: calc.w.unit, parinam: calc.qty, unskilled: calc.unskilled, skilled: calc.skilled, itar: calc.itar,
+    ekuun: calc.ekuun, manday: calc.manday, date: new Date().toISOString().slice(0,10)
+  };
+  finishSaveEntry(fields);
+  document.getElementById('pParimaan').value = '';
+  document.getElementById('pItar').value = 0;
+  calcPublic();
+}
+
+function saveIndividual() {
+  const errEl = document.getElementById('iErr');
+  errEl.style.display = 'none';
+  const yantrana = document.getElementById('iYantrana').value;
+  const kutumb = document.getElementById('iKutumb').value;
+  const jat = document.getElementById('iJat').value;
+  const labharthi = document.getElementById('iLabharthi').value.trim();
+  const kaam = document.getElementById('iKaam').value;
+  const calc = calcIndiv();
+  if (!yantrana || !kutumb || !jat || !labharthi || !kaam || !calc || !calc.qty) {
+    errEl.textContent = 'कृपया सर्व रकाने व परिमाण भरा.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (isDuplicateIndividual(labharthi, kaam, editingId)) {
+    errEl.textContent = 'या लाभार्थ्याला हे काम आधीच दिलेले आहे — तेच काम दुसऱ्यांदा नोंदवता येणार नाही.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const fields = {
+    kind: 'individual', gp: currentGP, yantrana, upchar:'', kaam,
+    kutumb, labharthi, jat,
+    unit: calc.w.unit, parinam: calc.qty, unskilled: calc.unskilled, skilled: calc.skilled, itar: calc.itar,
+    ekuun: calc.ekuun, manday: calc.manday, date: new Date().toISOString().slice(0,10)
+  };
+  finishSaveEntry(fields);
+  document.getElementById('iLabharthi').value = '';
+  document.getElementById('iParimaan').value = '';
+  document.getElementById('iItar').value = 0;
+  calcIndiv();
+}
+
+/** नवीन नोंद जतन करते किंवा (editingId सेट असल्यास) आधीची नोंद जागच्याजागी अद्ययावत करते */
+function finishSaveEntry(fields) {
+  if (editingId !== null) {
+    const idx = entries.findIndex(e => e.id === editingId);
+    if (idx === -1) { editingId = null; }
+    else {
+      const existing = entries[idx];
+      const updated = Object.assign({}, existing, fields, { id: existing.id, row: existing.row, synced: existing.synced });
+      entries[idx] = updated;
+      persist();
+      updateStats();
+      renderRecords();
+      exitEditMode();
+      if (existing.row) {
+        showToast('बदल जतन झाला — Google Sheet अद्ययावत करत आहे...');
+        editEntryOnSheet(updated).then(ok => {
+          if (ok) { showToast('Google Sheet अद्ययावत झाले ✓'); refreshListsFromSheet(); }
+          else { updated.synced = false; persist(); renderRecords(); showToast('Sheet अद्ययावत करता आले नाही — नंतर पुन्हा प्रयत्न करा'); }
+        });
+      } else {
+        showToast('बदल जतन झाला — Google Sheet ला पाठवत आहे...');
+        syncEntry(updated);
+      }
+      return;
+    }
+  }
+  const entry = Object.assign({ id: Date.now(), synced: false }, fields);
+  entries.push(entry);
+  persist();
+  updateStats();
+  showToast('काम जतन झाले — Google Sheet ला पाठवत आहे...');
+  syncEntry(entry);
+}
+
+/** नोंदी टॅबमधून एखादी नोंद संपादित करण्यासाठी संबंधित फॉर्म आधीच्या डेटासह उघडते */
+function startEditEntry(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  editingId = id;
+  if (e.kind === 'public') {
+    document.querySelector('.tab[data-tab="public"]').click();
+    document.getElementById('pYantrana').value = e.yantrana;
+    document.getElementById('pUpchar').value = e.upchar;
+    onPublicUpcharChange();
+    document.getElementById('pKaam').value = e.kaam;
+    onPublicKaamChange();
+    document.getElementById('pParimaan').value = e.parinam;
+    document.getElementById('pItar').value = e.itar || 0;
+    calcPublic();
+    document.getElementById('pSaveBtn').textContent = 'बदल जतन करा';
+    document.getElementById('pCancelBtn').style.display = 'block';
+  } else {
+    document.querySelector('.tab[data-tab="individual"]').click();
+    document.getElementById('iYantrana').value = e.yantrana;
+    document.getElementById('iKutumb').value = e.kutumb;
+    document.getElementById('iJat').value = e.jat;
+    document.getElementById('iLabharthi').value = e.labharthi;
+    document.getElementById('iKaam').value = e.kaam;
+    calcIndiv();
+    document.getElementById('iParimaan').value = e.parinam;
+    document.getElementById('iItar').value = e.itar || 0;
+    calcIndiv();
+    document.getElementById('iSaveBtn').textContent = 'बदल जतन करा';
+    document.getElementById('iCancelBtn').style.display = 'block';
+  }
+  showToast('काम संपादनासाठी फॉर्ममध्ये भरले — बदल करून "बदल जतन करा" दाबा');
+}
+function exitEditMode() {
+  editingId = null;
+  const pBtn = document.getElementById('pSaveBtn'); if (pBtn) pBtn.textContent = 'जतन करा';
+  const iBtn = document.getElementById('iSaveBtn'); if (iBtn) iBtn.textContent = 'जतन करा';
+  const pCancel = document.getElementById('pCancelBtn'); if (pCancel) pCancel.style.display = 'none';
+  const iCancel = document.getElementById('iCancelBtn'); if (iCancel) iCancel.style.display = 'none';
+}
+function cancelEdit() {
+  exitEditMode();
+  showToast('संपादन रद्द केले');
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = entries.length;
+  document.getElementById('statAmount').textContent = fmtMoney(entries.reduce((s,e)=>s+e.ekuun,0));
+  document.getElementById('statManday').textContent = fmtNum(entries.reduce((s,e)=>s+e.manday,0));
+  document.getElementById('tabCount').textContent = entries.length;
+}
+
+function renderRecords() {
+  const area = document.getElementById('recordsArea');
+  document.getElementById('curGpLine').textContent = [currentGP, currentTaluka, currentJilha, currentSaal].filter(Boolean).join(', ');
+  if (entries.length === 0) {
+    area.innerHTML = '<div class="empty">अजून कोणतीही नोंद नाही</div>';
+    return;
+  }
+  let html = '<div class="tablewrap"><table><thead><tr><th>प्रकार</th><th>यंत्रणा</th><th>कामाचे नाव</th><th>लाभार्थी</th><th>परिमाण</th><th>एकुण (₹)</th><th>मनुष्यदिन</th><th>सिंक</th><th></th></tr></thead><tbody>';
+  entries.slice().reverse().forEach(e => {
+    html += `<tr>
+      <td><span class="tag ${e.kind==='public'?'tag-pub':'tag-ind'}">${e.kind==='public'?'सार्वजनिक':'वैयक्तिक'}</span></td>
+      <td>${e.yantrana}</td>
+      <td>${e.kaam}</td>
+      <td>${e.labharthi || '-'}</td>
+      <td>${e.parinam} ${e.unit}</td>
+      <td>${fmtMoney(e.ekuun)}</td>
+      <td>${fmtNum(e.manday)}</td>
+      <td><span class="tag ${e.synced?'tag-sync':'tag-pending'}">${e.synced?'✓ पाठवले':'⏳ प्रलंबित'}</span></td>
+      <td><button class="edit" onclick="startEditEntry(${e.id})">✎</button> <button class="del" onclick="deleteEntry(${e.id})">✕</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table></div>';
+  area.innerHTML = html;
+}
+
+async function deleteEntry(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  if (!confirm('हे काम खरंच वगळायचं आहे का? हा बदल Google Sheet मध्येही होईल.')) return;
+  if (editingId === id) exitEditMode();
+  if (e.row && GS_URL) {
+    showToast('Google Sheet मधून वगळत आहे...');
+    const ok = await deleteEntryOnSheet(e.row, e.kind);
+    if (!ok) { showToast('Sheet मधून वगळता आले नाही — तरीही स्थानिक यादीतून काढले'); }
+  }
+  entries = entries.filter(x => x.id !== id);
+  persist();
+  updateStats();
+  renderRecords();
+}
+
+function persist() {
+  try { window.storage.set('entries_v1', JSON.stringify(entries), false); } catch (e) { console.error(e); }
+}
+async function loadEntries() {
+  try {
+    const res = await window.storage.get('entries_v1', false);
+    entries = res && res.value ? JSON.parse(res.value) : [];
+  } catch (e) { entries = []; }
+  updateStats();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ===================== गाव-निवड ===================== 
+async function loadVillage() {
+  try {
+    const res = await window.storage.get('current_gp', false);
+    currentGP = res && res.value ? res.value : '';
+    const rj = await window.storage.get('current_jilha', false);
+    currentJilha = rj && rj.value ? rj.value : '';
+    const rt = await window.storage.get('current_taluka', false);
+    currentTaluka = rt && rt.value ? rt.value : '';
+    const rs = await window.storage.get('current_saal', false);
+    currentSaal = rs && rs.value ? rs.value : '';
+    const kt = await window.storage.get('kutumb_total', false);
+    kutumbTotalCount = kt && kt.value ? parseInt(kt.value) : 0;
+    const vp = await window.storage.get('village_password', false);
+    currentVillagePassword = vp && vp.value ? vp.value : '';
+  } catch (e) { currentGP = ''; currentJilha = ''; currentTaluka = ''; currentSaal = ''; kutumbTotalCount = 0; currentVillagePassword = ''; }
+  if (currentGP) {
+    document.getElementById('gateScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('gpBadgeName').textContent = currentGP;
+    document.getElementById('gpBadgeExtra').textContent = [currentTaluka, currentJilha, currentSaal].filter(Boolean).join(' · ');
+  } else {
+    document.getElementById('gateScreen').style.display = 'flex';
+    document.getElementById('mainApp').style.display = 'none';
+    loadDistrictsIntoGate();
+  }
+}
+
+// ===================== जिल्हा → तालुका → गाव (कॅस्केडिंग निवड) =====================
+async function loadDistrictsIntoGate() {
+  populateGateSaalOptions();
+  const sel = document.getElementById('gateJilha');
+  if (!GS_URL) { sel.innerHTML = '<option value="">आधी "Google Sheet" टॅबमधून URL जोडा</option>'; return; }
+  sel.innerHTML = '<option value="">लोड होत आहे...</option>';
+  try {
+    const data = await gsGet('action=districts', 24 * 3600 * 1000);
+    checkScriptVersion(data);
+    if (data.ok && data.districts) {
+      sel.innerHTML = '<option value="">-- जिल्हा निवडा --</option>' + data.districts.map(d => `<option value="${d}">${d}</option>`).join('');
+    } else {
+      sel.innerHTML = '<option value="">यादी मिळाली नाही</option>';
+    }
+  } catch (e) { sel.innerHTML = '<option value="">यादी आणता आली नाही</option>'; }
+}
+async function onGateJilhaChange() {
+  const jilha = document.getElementById('gateJilha').value;
+  const talukaSel = document.getElementById('gateTaluka');
+  const gpSel = document.getElementById('gateGP');
+  gpSel.innerHTML = '<option value="">आधी तालुका निवडा</option>'; gpSel.disabled = true;
+  document.getElementById('gateExistingNotice').style.display = 'none';
+  document.getElementById('newTalukaField').style.display = 'none';
+  document.getElementById('newVillageField').style.display = 'none';
+  if (!jilha) { talukaSel.innerHTML = '<option value="">आधी जिल्हा निवडा</option>'; talukaSel.disabled = true; return; }
+  talukaSel.innerHTML = '<option value="">लोड होत आहे...</option>'; talukaSel.disabled = true;
+  try {
+    const data = await gsGet('action=talukas&jilha=' + encodeURIComponent(jilha), 30 * 60 * 1000);
+    checkScriptVersion(data);
+    const talukas = (data.ok && data.talukas) ? data.talukas : [];
+    talukaSel.innerHTML = '<option value="">-- तालुका निवडा --</option>' +
+      talukas.map(t => `<option value="${t}">${t}</option>`).join('') +
+      '<option value="__new__">+ नवीन तालुका टाका</option>';
+    talukaSel.disabled = false;
+  } catch (e) { talukaSel.innerHTML = '<option value="">यादी आणता आली नाही</option>'; }
+}
+async function onGateTalukaChange() {
+  const jilha = document.getElementById('gateJilha').value;
+  const taluka = document.getElementById('gateTaluka').value;
+  const gpSel = document.getElementById('gateGP');
+  document.getElementById('gateExistingNotice').style.display = 'none';
+  document.getElementById('newVillageField').style.display = 'none';
+  if (taluka === '__new__') {
+    document.getElementById('newTalukaField').style.display = 'block';
+    gpSel.innerHTML = '<option value="">आधी तालुका जोडा</option>'; gpSel.disabled = true;
+    return;
+  }
+  document.getElementById('newTalukaField').style.display = 'none';
+  if (!taluka) { gpSel.innerHTML = '<option value="">आधी तालुका निवडा</option>'; gpSel.disabled = true; return; }
+  gpSel.innerHTML = '<option value="">लोड होत आहे...</option>'; gpSel.disabled = true;
+  try {
+    const data = await gsGet('action=villages&jilha=' + encodeURIComponent(jilha) + '&taluka=' + encodeURIComponent(taluka), 30 * 60 * 1000);
+    checkScriptVersion(data);
+    const villages = (data.ok && data.villages) ? data.villages : [];
+    gpSel.innerHTML = '<option value="">-- गाव निवडा --</option>' +
+      villages.map(v => `<option value="${v}">${v}</option>`).join('') +
+      '<option value="__new__">+ नवीन गाव टाका</option>';
+    gpSel.disabled = false;
+  } catch (e) { gpSel.innerHTML = '<option value="">यादी आणता आली नाही</option>'; }
+}
+/** नवीन तालुका "जिल्हा-तालुका-गाव-यादी" पानावर जोडते व लगेच निवडते */
+async function addNewTaluka() {
+  const jilha = document.getElementById('gateJilha').value;
+  const newTaluka = document.getElementById('newTalukaInput').value.trim();
+  if (!jilha || !newTaluka) { showToast('कृपया जिल्हा निवडा व तालुक्याचे नाव टाका'); return; }
+  // तात्पुरता (placeholder) गाव-नोंद टाकावी लागते कारण यादी (जिल्हा,तालुका,गाव) अशा ३ स्तंभांची आहे —
+  // प्रत्यक्ष गाव पुढच्या पायरीत "नवीन गाव टाका" मधून जोडलं जाईल
+  try {
+    await fetch(GS_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'addGeo', jilha, taluka: newTaluka, gav: '(गाव लवकरच जोडले जाईल)' })
+    });
+  } catch (e) {}
+  clearGsCache();
+  document.getElementById('newTalukaField').style.display = 'none';
+  document.getElementById('newTalukaInput').value = '';
+  showToast('तालुका जोडला ✓');
+  await onGateJilhaChange();
+  document.getElementById('gateTaluka').value = newTaluka;
+  await onGateTalukaChange();
+}
+/** नवीन गाव यादीत जोडते व लगेच निवडते */
+async function addNewVillage() {
+  const jilha = document.getElementById('gateJilha').value;
+  const taluka = document.getElementById('gateTaluka').value === '__new__' ? document.getElementById('newTalukaInput').value.trim() : document.getElementById('gateTaluka').value;
+  const newVillage = document.getElementById('newVillageInput').value.trim();
+  if (!jilha || !taluka || !newVillage) { showToast('कृपया जिल्हा, तालुका निवडा व गावाचे नाव टाका'); return; }
+  try {
+    await fetch(GS_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'addGeo', jilha, taluka, gav: newVillage })
+    });
+  } catch (e) {}
+  clearGsCache();
+  document.getElementById('newVillageField').style.display = 'none';
+  document.getElementById('newVillageInput').value = '';
+  showToast('गाव जोडले ✓');
+  await onGateTalukaChange();
+  document.getElementById('gateGP').value = newVillage;
+  onGateVillageChange();
+}
+async function onGateVillageChange() {
+  gateExistingEntries = null; gateExistingKutumb = 0;
+  updateGatePasswordHint();
+  const notice = document.getElementById('gateExistingNotice');
+  notice.style.display = 'none';
+  const jilha = document.getElementById('gateJilha').value;
+  const taluka = document.getElementById('gateTaluka').value;
+  const gp = document.getElementById('gateGP').value;
+  const saal = document.getElementById('gateSaal').value.trim();
+  if (gp === '__new__') { document.getElementById('newVillageField').style.display = 'block'; return; }
+  document.getElementById('newVillageField').style.display = 'none';
+  if (!jilha || !taluka || !gp || !saal || !Auth.isSignedIn()) return;
+  try {
+    const data = await UserDrive.readVillage({ jilha, taluka, gav: gp, saal });
+    if (data.exists) {
+      gateExistingEntries = data.entries || [];
+      gateExistingKutumb = data.kutumbTotal || 0;
+      notice.textContent = `तुमच्या Google Drive मध्ये या गावाचा सन ${saal} चा डेटा आधीच सापडला — ${gateExistingEntries.length} कामे नोंदवलेली आहेत. "निश्चित करा" दाबल्यावर तोच डेटा उघडेल (नवीन एक्सेल तयार होणार नाही, त्याच डेटात पुढे भरता येईल).`;
+      notice.style.display = 'block';
+      const kEl = document.getElementById('gateKutumbTotal');
+      if (kEl && !kEl.value) kEl.value = gateExistingKutumb;
+    }
+  } catch (e) { console.error('village check failed', e); }
+}
+
+async function confirmVillage() {
+  const jilha = document.getElementById('gateJilha').value;
+  const taluka = document.getElementById('gateTaluka').value;
+  const gp = document.getElementById('gateGP').value;
+  const saal = document.getElementById('gateSaal').value.trim();
+  const kutumbTotal = parseInt(document.getElementById('gateKutumbTotal').value) || 0;
+  const errEl = document.getElementById('gateErr');
+  if (!jilha || !taluka || !gp || !saal || taluka === '__new__' || gp === '__new__') {
+    errEl.textContent = taluka === '__new__' || gp === '__new__'
+      ? 'कृपया आधी नवीन तालुका/गाव "जोडा" बटणाने जोडा, मग निवडा.'
+      : 'कृपया जिल्हा, तालुका, ग्रामपंचायत व सन ही सर्व माहिती भरा.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  const villagePassword = document.getElementById('gateVillagePassword').value;
+  if (!isAdmin && !villagePassword) {
+    errEl.textContent = 'कृपया गावाचा पासवर्ड टाका (डीफॉल्ट: गावाचे नाव इंग्लिशमध्ये + 123).';
+    errEl.style.display = 'block';
+    return;
+  }
+  const access = await checkVillageAccess(jilha, taluka, gp, villagePassword);
+  if (!access.granted) {
+    errEl.textContent = access.error || 'पासवर्ड चुकीचा आहे — या गावाचा आराखडा फक्त जबाबदार व्यक्तीच बदलू शकते.';
+    errEl.style.display = 'block';
+    return;
+  }
+  currentVillagePassword = villagePassword;
+  currentJilha = jilha; currentTaluka = taluka; currentGP = gp; currentSaal = saal; kutumbTotalCount = kutumbTotal;
+  // आधीचा डेटा सापडला असेल तर तोच लोड करा (त्यातच पुढे भरता/संपादित करता यावं म्हणून)
+  entries = (gateExistingEntries && gateExistingEntries.length)
+    ? gateExistingEntries.map(e => Object.assign({}, e, { id: e.id || (Date.now() + Math.random()), synced: true }))
+    : [];
+  try {
+    await window.storage.set('current_jilha', jilha, false);
+    await window.storage.set('current_taluka', taluka, false);
+    await window.storage.set('current_gp', gp, false);
+    await window.storage.set('current_saal', saal, false);
+    await window.storage.set('kutumb_total', String(kutumbTotal), false);
+    await window.storage.set('entries_v1', JSON.stringify(entries), false);
+    await window.storage.set('village_password', villagePassword, false);
+  } catch (e) {}
+  document.getElementById('gateScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('gpBadgeName').textContent = currentGP;
+  document.getElementById('gpBadgeExtra').textContent = [currentTaluka, currentJilha, currentSaal].filter(Boolean).join(' · ');
+  updateStats();
+  renderRecords();
+  if (entries.length) showToast(`आधीचा डेटा लोड झाला — ${entries.length} कामे`);
+  ActivityLog.add('village_open', 'ग्रामपंचायत उघडली — सन ' + saal + ', कुटुंब संख्या ' + kutumbTotal + ', आधीच्या नोंदी ' + entries.length);
+  pushMetaToSheet();
+  refreshListsFromSheet();
+}
+
+async function startChangeVillage() {
+  if (currentGP) ActivityLog.add('village_close', 'ग्रामपंचायत बदलण्यासाठी/बंद करण्यासाठी निवडले');
+  if (entries.length === 0) {
+    await doClearAndReset();
+    return;
+  }
+  const proceed = confirm('तपशील बदलण्यापूर्वी सर्व सध्याचा डेटा Google Sheet ला सेव्ह केला जाईल, त्यानंतर स्थानिक नोंदी पुसल्या जातील. पुढे जायचं का?');
+  if (!proceed) return;
+  showToast('डेटा सेव्ह करत आहे...');
+  const pending = entries.filter(e => !e.synced);
+  if (pending.length > 0) {
+    const ok = await pushEntriesToSheet(pending);
+    if (!ok) {
+      alert('डेटा सेव्ह करताना त्रुटी आली:\n\n' + lastSyncError + '\n\n"Google Sheet" टॅबमधून जोडणी पुन्हा तपासा.');
+      return;
+    }
+  }
+  await doClearAndReset();
+}
+
+/** अ‍ॅपमधून बाहेर पडण्यापूर्वी उरलेला डेटा सेव्ह करते, मग पान बंद करण्याचा प्रयत्न करते
+ * (ब्राउझर सुरक्षेमुळे स्क्रिप्टने न उघडलेलं पान थेट बंद होत नाही — तसं झाल्यास तसा संदेश दाखवते) */
+async function exitApp() {
+  const pending = entries.filter(e => !e.synced);
+  if (pending.length > 0) {
+    showToast('बाहेर पडण्यापूर्वी डेटा सेव्ह करत आहे...');
+    await pushEntriesToSheet(pending);
+  }
+  try { window.close(); } catch (e) {}
+  setTimeout(() => {
+    alert('सर्व डेटा सुरक्षित सेव्ह झाला आहे ✓\n\nहे पान आता तुम्ही बंद करू शकता (ब्राउझर टॅब बंद करा).');
+  }, 300);
+}
+
+async function doClearAndReset() {
+  entries = [];
+  currentGP = ''; currentJilha = ''; currentTaluka = ''; currentSaal = ''; kutumbTotalCount = 0;
+  gateExistingEntries = null; gateExistingKutumb = 0;
+  try {
+    await window.storage.set('entries_v1', JSON.stringify([]), false);
+    await window.storage.set('current_gp', '', false);
+    await window.storage.set('current_jilha', '', false);
+    await window.storage.set('current_taluka', '', false);
+    await window.storage.set('current_saal', '', false);
+    await window.storage.set('kutumb_total', '0', false);
+    await window.storage.set('village_password', '', false);
+  } catch (e) {}
+  currentVillagePassword = '';
+  updateStats();
+  document.getElementById('gateGP').innerHTML = '<option value="">आधी तालुका निवडा</option>'; document.getElementById('gateGP').disabled = true;
+  document.getElementById('gateTaluka').innerHTML = '<option value="">आधी जिल्हा निवडा</option>'; document.getElementById('gateTaluka').disabled = true;
+  document.getElementById('gateJilha').value = '';
+  populateGateSaalOptions();
+  document.getElementById('gateKutumbTotal').value = '';
+  document.getElementById('gateVillagePassword').value = '';
+  document.getElementById('gateExistingNotice').style.display = 'none';
+  document.getElementById('gateScreen').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+  loadDistrictsIntoGate();
+  showToast('नवीन तपशिलासाठी तयार');
+}
+
+function currentVillageKey() {
+  return { jilha: currentJilha, taluka: currentTaluka, gav: currentGP, saal: currentSaal };
+}
+
+// ===================== Google Sheet सिंक (आपोआप, बटणाशिवाय) =====================
+
+// ===================== (v9) अ‍ॅक्टिव्हिटी-लॉग =====================
+// कोणत्या Gmail ने कोणती ग्रामपंचायत उघडली व काय बदल केले ते ॲडमिनच्या केंद्रीय Sheet मध्ये ("अ‍ॅक्टिव्हिटी-लॉग"
+// व "गाव-वापरकर्ते" पाने) जमा होते. सर्व्हरला कमी कॉल जावेत म्हणून नोंदी गोळा करून एकत्र पाठवल्या जातात.
+const ActivityLog = {
+  _q: [], _timer: null, _busy: false, _KEY: 'act_queue_v1',
+  _load() { try { const r = localStorage.getItem(this._KEY); if (r) this._q = JSON.parse(r) || []; } catch (e) {} },
+  _save() { try { localStorage.setItem(this._KEY, JSON.stringify(this._q.slice(-300))); } catch (e) {} },
+  add(action, detail, village) {
+    try {
+      const v = village === null ? {} : (village || { jilha: currentJilha, taluka: currentTaluka, gav: currentGP });
+      this._q.push({ t: Date.now(), email: (Auth.getEmail && Auth.getEmail()) || '', jilha: v.jilha || '', taluka: v.taluka || '',
+        gav: v.gav || '', action, detail: (detail || '') + (typeof isAdmin !== 'undefined' && isAdmin ? ' [ॲडमिन]' : '') });
+      this._save();
+      clearTimeout(this._timer);
+      this._timer = setTimeout(() => this.flush(), 8000);
+    } catch (e) {}
+  },
+  async flush(keepalive) {
+    if (this._busy || !this._q.length || typeof GS_URL === 'undefined' || !GS_URL) return;
+    this._busy = true;
+    const batch = this._q.slice(0, 100);
+    try {
+      const res = await fetch(GS_URL, { method: 'POST', keepalive: !!keepalive, headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'logBatch', events: batch }) });
+      const j = await res.json();
+      if (j && j.ok) { this._q = this._q.slice(batch.length); this._save(); }
+    } catch (e) { /* नंतर पुन्हा प्रयत्न */ }
+    this._busy = false;
+    if (this._q.length) { clearTimeout(this._timer); this._timer = setTimeout(() => this.flush(), 30000); }
+  }
+};
+ActivityLog._load();
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') ActivityLog.flush(true); });
+window.addEventListener('online', () => ActivityLog.flush());
+setTimeout(() => ActivityLog.flush(), 5000);
+
+let lastSyncError = '';
+function errText_(e) { return (e && e.message) ? e.message : String(e); }
+// (v9) नोंदी आता वापरकर्त्याच्या स्वतःच्या Google Drive मधील गाव-शीटमध्ये जातात (ॲडमिनच्या नाही)
+async function pushEntriesToSheet(list) {
+  if (list.length === 0) return true;
+  try {
+    const res = await UserDrive.appendEntries(currentVillageKey(), list);
+    list.forEach((e, i) => { if (res.rows[i] !== undefined) e.row = res.rows[i]; });
+    ActivityLog.add('add', list.length + ' नोंद(ी) जोडल्या: ' + list.slice(0, 3).map(e => (e.kaam || '') + (e.manday ? ' (' + e.manday + ' मनुष्यदिन)' : '')).join('; ') + (list.length > 3 ? ' …' : ''));
+    if (res.isNew) showToast('नवीन गावासाठी तुमच्या Google Drive मध्ये शीट आपोआप तयार झाली ✓');
+    return true;
+  } catch (e) {
+    console.error('sync failed', e);
+    lastSyncError = 'जोडणी अयशस्वी: ' + errText_(e);
+    return false;
+  }
+}
+async function editEntryOnSheet(entry) {
+  if (!entry.row) return false;
+  try {
+    await UserDrive.editEntry(currentVillageKey(), entry.row, entry);
+    ActivityLog.add('edit', 'नोंद बदलली (रांग ' + entry.row + '): ' + (entry.kaam || '') + (entry.manday ? ' — ' + entry.manday + ' मनुष्यदिन' : ''));
+    return true;
+  } catch (e) { console.error('edit sync failed', e); return false; }
+}
+async function deleteEntryOnSheet(row, kind) {
+  if (!row) return true;
+  try {
+    await UserDrive.deleteEntry(currentVillageKey(), row, kind);
+    ActivityLog.add('delete', 'नोंद वगळली (रांग ' + row + ', ' + (kind === 'individual' ? 'वैयक्तिक' : 'सार्वजनिक') + ')');
+    return true;
+  } catch (e) { console.error('delete sync failed', e); return false; }
+}
+async function syncEntry(entry) {
+  const ok = await pushEntriesToSheet([entry]);
+  if (ok) { entry.synced = true; persist(); renderRecords(); showToast('Google Sheet ला पाठवले ✓'); refreshListsFromSheet(); }
+  else { showToast('पाठवणे अयशस्वी: ' + lastSyncError); }
+}
+async function retryPendingSync() {
+  const pending = entries.filter(e => !e.synced);
+  if (pending.length === 0) return;
+  const ok = await pushEntriesToSheet(pending);
+  if (ok) { pending.forEach(e => e.synced = true); persist(); renderRecords(); }
+}
+async function pushMetaToSheet() {
+  try {
+    const res = await UserDrive.writeKutumb(currentVillageKey(), kutumbTotalCount);
+    if (res && res.isNew) showToast('नवीन गावासाठी तुमच्या Google Drive मध्ये शीट आपोआप तयार झाली ✓');
+  } catch (e) { console.error('meta sync failed', e); }
+}
+/** Google Sheet वर चालणारा कोड जुना (न-अद्ययावत) आहे का हे तपासून वरती लाल पट्टी दाखवते */
+function checkScriptVersion(data) {
+  const banner = document.getElementById('versionBanner');
+  if (!banner) return;
+  if (data && typeof data.scriptVersion === 'number') {
+    if (data.scriptVersion < EXPECTED_SCRIPT_VERSION) {
+      banner.style.display = 'block';
+      versionMismatchWarned = true;
+    } else {
+      banner.style.display = 'none';
+    }
+  } else if (!versionMismatchWarned) {
+    // जुन्या (scriptVersion नसलेल्या) डिप्लॉयमेंटवर हा फील्डच परत येत नाही — तेही जुनाच कोड असल्याचं लक्षण
+    banner.style.display = 'block';
+    versionMismatchWarned = true;
+  }
+}
+
+async function refreshListsFromSheet(force) {
+  if (!GS_URL) return;
+  try {
+    const data = await gsGet('action=data', 30 * 60 * 1000, !!force);
+    if (!data.ok) throw new Error(data.error || 'Sheet कडून चुकीचा प्रतिसाद आला');
+    checkScriptVersion(data);
+    if (Array.isArray(data.works)) {
+      WORKS = data.works.map(w => ({
+        name:w.name, type:w.type, upchar:w.upchar||'', unit:w.unit, rate:Number(w.rate),
+        unskilled:Number(w.unskilled), skilled:Number(w.skilled), divisor:Number(w.divisor)
+      }));
+      if (WORKS.length === 0) {
+        console.warn('Sheet जोडलेली आहे, पण "Data-सूची" पानावर अजून एकही काम भरलेलं नाही.');
+      }
+    }
+    if (data.yantrana && data.yantrana.length) YANTRANA = data.yantrana;
+    if (data.upchar && data.upchar.length) UPCHAR = data.upchar;
+    if (data.kutumb && data.kutumb.length) KUTUMB = data.kutumb;
+    if (data.jat && data.jat.length) JAT = data.jat;
+    populateStaticDropdowns();
+    if (data.setup) {
+      schemeName = data.setup.schemeName || DEFAULT_SCHEME_NAME;
+      devInfo = data.setup.devInfo || '';
+      appInfo = data.setup.appInfo || '';
+      wageRate = Number(data.setup.wageRate) || wageRate;
+      // लोगो: Sheet वर सेट असेल तर तोच अंतिम मानला जातो (विकसकाने अ‍ॅपमधून किंवा Sheet मधून — दोन्हीकडून बदलता येतो)
+      if (data.setup.logoUrl) {
+        logoUrl = data.setup.logoUrl;
+        try { await window.storage.set('logo_url', logoUrl, false); } catch (e) {}
+      }
+      applyBranding();
+      // गाव निवडलेलं नसताना (गेट स्क्रीनवर असताना) Sheet मधली एकुण कुटूंब संख्या आपसूक दाखवा
+      if (!currentGP && !kutumbTotalCount && data.setup.kutumbTotal) {
+        const inputEl = document.getElementById('gateKutumbTotal');
+        if (inputEl) inputEl.value = data.setup.kutumbTotal;
+      }
+    }
+    if (Array.isArray(data.pdfDocs)) renderPdfInfoList(data.pdfDocs);
+    return { ok: true, workCount: (data.works||[]).length };
+  } catch (e) {
+    console.error('list refresh failed', e);
+    return { ok: false, error: String(e && e.message ? e.message : e) };
+  }
+}
+
+/** "माहिती" टॅबमध्ये उपलब्ध PDF दुव्यांची यादी दाखवते — प्रत्येक दुवा नवीन टॅबमध्ये उघडतो,
+ * तिथून वापरकर्ता तो पाहू व (Drive/PDF व्ह्यूअरमधील प्रिंट बटणाने) प्रिंट करू शकतो */
+function renderPdfInfoList(pdfDocs) {
+  const area = document.getElementById('pdfInfoArea');
+  if (!area) return;
+  if (!pdfDocs.length) { area.innerHTML = '<p class="hint">सध्या इथे कोणतेही PDF उपलब्ध नाहीत.</p>'; return; }
+  area.innerHTML = pdfDocs.map(d => `
+    <div class="card" style="margin-bottom:10px;">
+      <h3 style="margin:0 0 4px;">${escapeHtml_(d.title)}</h3>
+      ${d.desc ? `<p class="sub" style="margin:0 0 8px;">${escapeHtml_(d.desc)}</p>` : ''}
+      <a class="btn btn-secondary" style="display:inline-block; text-decoration:none;" href="${escapeAttr_(d.url)}" target="_blank" rel="noopener">उघडा / पहा / प्रिंट करा</a>
+    </div>
+  `).join('');
+}
+function escapeHtml_(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr_(s) { return escapeHtml_(s); }
+
+// ===================== टॅब स्विचिंग =====================
+let tabHistory = ['public'];
+function switchToTab(tabName, recordHistory = true) {
+  const tabEl = document.querySelector('.tab[data-tab="' + tabName + '"]');
+  if (!tabEl) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+  tabEl.classList.add('active');
+  document.getElementById('panel-' + tabName).style.display = 'block';
+  if (tabName === 'records') renderRecords();
+  if (recordHistory) {
+    if (tabHistory[tabHistory.length - 1] !== tabName) tabHistory.push(tabName);
+    if (tabHistory.length > 20) tabHistory.shift();
+  }
+}
+function goBackTab() {
+  if (tabHistory.length > 1) {
+    tabHistory.pop();
+    const prev = tabHistory[tabHistory.length - 1];
+    switchToTab(prev, false);
+  } else {
+    showToast('ही पहिली स्क्रीन आहे');
+  }
+}
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => switchToTab(tab.dataset.tab));
+});
+
+// ===================== Excel निर्यात (मूळ नमुना शीटप्रमाणे रचना — शीर्षक, सायन रंग, लँडस्केप, खरी सूत्रे) =====================
+let lastLogoError = '';
+const ROWS_PER_BLOCK = 15; // प्रति यंत्रणा-गट, प्रति पान — साधारण A4 लँडस्केप पानात मावेल इतपत अंदाजे संख्या (गरज भासल्यास बदलता येईल)
+
+async function buildWorkbookFresh() {
+  const wb = new ExcelJS.Workbook();
+  // सर्व शीटसाठी समान पान-मार्जिन (इंचात) — डावी/उजवी/वरची बाजू 0.8"
+  const PAGE_MARGINS = { left: 0.8, right: 0.8, top: 0.8, bottom: 0.75, header: 0.3, footer: 0.3 };
+  const TITLE_COLOR = { argb: 'FF002060' };
+  const CYAN = { type:'pattern', pattern:'solid', fgColor:{argb:'FF00FFFF'} };
+  const SUBTOTAL_GP = { type:'pattern', pattern:'solid', fgColor:{argb:'FFDCEEE1'} };
+  const SUBTOTAL_SH = { type:'pattern', pattern:'solid', fgColor:{argb:'FFFDEBD3'} };
+  const GRAND = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF7C97C'} };
+  const thin = { style:'thin', color:{argb:'FFC9C9C9'} };
+  const border = { top:thin, bottom:thin, left:thin, right:thin };
+  const jilha = currentJilha || 'सातारा', taluka = currentTaluka || 'सातारा', saal = currentSaal || '२०२४ - २०२५';
+  lastLogoError = '';
+
+  function colIdx(letters) {
+    let n = 0;
+    for (let i=0;i<letters.length;i++) n = n*26 + (letters.charCodeAt(i)-64);
+    return n;
+  }
+  function computeCost(name, qty) {
+    const w = WORKS.find(x => x.name === name);
+    const q = Number(qty) || 0;
+    if (!w || !q) return { unit:'', total:0, unskilled:0, skilled:0, manday:0 };
+    const total = q * (Number(w.rate)||0);
+    const unskilled = total * (Number(w.unskilled)||0);
+    const skilled = total * (Number(w.skilled)||0);
+    const manday = w.divisor ? unskilled / Number(w.divisor) : 0;
+    return { unit: w.unit||'', total, unskilled, skilled, manday };
+  }
+  const rnd = (n) => Math.round(n||0);
+
+  // ==================== Top Page (नमुना फाईलप्रमाणे तंतोतंत) ====================
+  const tp = wb.addWorksheet('Top Page', { pageSetup:{ orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0, margins: PAGE_MARGINS } });
+  [1,2,3,4,5,6,7,8].forEach(rn => tp.getRow(rn).height = 14);
+  tp.getRow(9).height = 160;
+  tp.mergeCells('A3:V9');
+  if (logoUrl) {
+    try {
+      const fetchUrl = normalizeLogoUrl_(logoUrl);
+      const resp = await fetch(fetchUrl);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const blob = await resp.blob();
+      const buf = await blob.arrayBuffer();
+      const ext = /\.jpe?g(\?|$)/i.test(fetchUrl) ? 'jpeg' : (/\.gif(\?|$)/i.test(fetchUrl) ? 'gif' : 'png');
+      const imgId = wb.addImage({ buffer: buf, extension: ext });
+      tp.addImage(imgId, 'A3:V9');
+    } catch (err) {
+      console.error('लोगो एक्सेलमध्ये टाकता आला नाही', err);
+      lastLogoError = 'लोगो जोडता आला नाही (' + (err && err.message ? err.message : err) + '). बहुतेकदा कारण: वापरलेली लिंक थेट-चित्र URL नाही, किंवा तो होस्ट क्रॉस-ओरिजिन (CORS) प्रवेश देत नाही. GitHub raw, imgur (i.imgur.com) यासारखी थेट लिंक वापरून पहा.';
+    }
+  }
+  tp.mergeCells('A10:V10'); tp.getCell('A10').value = jilha + ' जिल्हा परिषद,' + jilha;
+  tp.getCell('A10').font = { name:'Sakal Marathi 01', bold:true, size:28 };
+  tp.getRow(10).height = 35;
+  tp.mergeCells('A11:V11'); tp.getCell('A11').value = schemeName + '-महाराष्ट्र';
+  tp.getCell('A11').font = { name:'Sakal Marathi 01', bold:true, size:28 };
+  tp.getRow(11).height = 47;
+  tp.mergeCells('A12:V12'); tp.getCell('A12').value = 'सन ' + saal + '  समृध्द लेबर बजेट व नियोजन आराखडा';
+  tp.getCell('A12').font = { name:'Sakal Marathi 01', bold:true, size:48, color:{argb:'FF7030A0'} };
+  tp.getRow(12).height = 113;
+  tp.mergeCells('A13:V13'); tp.getCell('A13').value = 'ग्रामपंचायत- ' + currentGP + ' ';
+  tp.getCell('A13').font = { name:'Sakal Marathi 01', bold:true, size:48, color:{argb:'FFFF0000'} };
+  tp.getRow(13).height = 61;
+  tp.mergeCells('A14:V15'); tp.getCell('A14').value = 'तालुका -  ' + taluka + ' ';
+  tp.getCell('A14').font = { name:'Sakal Marathi 01', bold:true, size:36 };
+  tp.getRow(14).height = 53; tp.getRow(15).height = 3;
+  ['A10','A11','A12','A13','A14'].forEach((c) => { tp.getCell(c).alignment = { horizontal:'center', vertical:'middle' }; });
+  for (let c=1;c<=22;c++) tp.getColumn(c).width = 9.1;
+  if (devInfo) {
+    tp.mergeCells('A16:V16'); tp.getCell('A16').value = 'विकसक: ' + devInfo;
+    tp.getCell('A16').font = { italic:true, size:10, color:{argb:'FF6B736C'} };
+    tp.getCell('A16').alignment = { horizontal:'center' };
+  }
+
+  // ==================== सार्वजनिक + वैयक्तिक कामे यंत्रणा-निहाय जोडून एकाच रांगेत ठेवण्यासाठी तयारी ====================
+  function pairEntries(list) {
+    const pubs = list.filter(e => e.kind === 'public');
+    const inds = list.filter(e => e.kind === 'individual');
+    const n = Math.max(pubs.length, inds.length);
+    const rows = [];
+    for (let i=0;i<n;i++) rows.push({ pub: pubs[i]||null, ind: inds[i]||null });
+    return rows;
+  }
+  const gpRowsAll = pairEntries(entries.filter(e => e.yantrana === 'ग्रामपंचायत यंत्रणा'));
+  const shRowsAll = pairEntries(entries.filter(e => e.yantrana !== 'ग्रामपंचायत यंत्रणा'));
+
+  const B_WIDTHS = {A:2.89,B:11,C:9.67,D:18.67,E:26,F:8.11,G:9.56,H:8.11,I:6.11,J:10.11,K:7.11,
+    L:2.22,M:26,N:26,O:7.60,P:6.67,Q:9.11,R:7.67,S:6.22,T:9.44,U:7.11,V:6.11,W:8.11,X:8.11,Y:6.67,Z:8.11,AA:8.11};
+
+  function writeBHeader(ws, pageLabel) {
+    Object.keys(B_WIDTHS).forEach(L => { ws.getColumn(L).width = B_WIDTHS[L]; });
+    ws.mergeCells('A1:AA1'); ws.getCell('A1').value = ' आराखडा ' + pageLabel;
+    ws.getCell('A1').font = { bold:true, size:20, color:TITLE_COLOR }; ws.getCell('A1').alignment = { horizontal:'center', vertical:'middle' };
+    ws.mergeCells('A2:AA2'); ws.getCell('A2').value = 'सन ' + saal + ' साठी ग्रामपंचायत निहाय कामाचे नियोजन (WORK PROJECTION)';
+    ws.getCell('A2').font = { bold:true, size:20, color:TITLE_COLOR }; ws.getCell('A2').alignment = { horizontal:'center', vertical:'middle' };
+    ws.mergeCells('A3:AA3'); ws.getCell('A3').value = 'ग्रामपंचायत ' + currentGP + ', तालुका ' + taluka + ', जि.' + jilha + '   (रक्कम रुपयात)';
+    ws.getCell('A3').font = { bold:true, size:20, color:TITLE_COLOR }; ws.getCell('A3').alignment = { horizontal:'center', vertical:'middle' };
+    [1,2,3].forEach(rn => ws.getRow(rn).height = 23);
+    function hcell(addr, val) {
+      const c = ws.getCell(addr);
+      if (val !== undefined) c.value = val;
+      c.font = { bold:true, size:12 }; c.fill = CYAN;
+      c.alignment = { horizontal:'center', vertical:'middle', wrapText:true }; c.border = border;
+    }
+    [['A4:A6','अ.क्र.'],['B4:B6','ग्रामपंचायत'],['C4:C6','यंत्रणा'],['D4:D6','कामाचा प्रकार'],
+     ['E4:K4','सार्वजनिक कामे'],['L4:U4','वैयक्तीक कामे'],['V4:AA4','एकुण']].forEach(([m,v]) => { ws.mergeCells(m); hcell(m.split(':')[0], v); });
+    [['E5:E6','कामाचे नाव'],['F5:F6','परिमाण'],['G5:J5','संभाव्य किंमत (रक्कम लाखात)'],['K5:K6','संभाव्य मनुष्यदिन निर्मीती'],
+     ['L5:L6','कुटूंब रचणा'],['M5:M6','कामाचे नाव'],['N5:N6','लाभार्थीचे नाव'],['O5:O6','प्रवर्ग'],['P5:P6','परिमाण'],
+     ['Q5:T5','संभाव्य किंमत (रक्कम लाखात)'],['U5:U6','संभाव्य मनुष्यदिन निर्मीती'],['V5:V6','एकुण कामे (संख्या)'],
+     ['W5:Z5','संभाव्य किंमत (रक्कम लाखात)'],['AA5:AA6','संभाव्य मनुष्यदिन निर्मीती']].forEach(([m,v]) => { ws.mergeCells(m); hcell(m.split(':')[0], v); });
+    [['G6','अकुशल'],['H6','कुशल'],['I6','इतर योजना'],['J6','एकुण'],
+     ['Q6','अकुशल'],['R6','कुशल'],['S6','इतर योजना'],['T6','एकुण'],
+     ['W6','अकुशल'],['X6','कुशल'],['Y6','इतर योजना'],['Z6','एकुण']].forEach(([a,v]) => hcell(a, v));
+    ws.getRow(6).height = 97;
+  }
+
+  function writePairRow(ws, r, pair, serial) {
+    const row = ws.getRow(r);
+    const gp = (pair.pub && pair.pub.gp) || (pair.ind && pair.ind.gp) || currentGP;
+    const yantrana = (pair.pub && pair.pub.yantrana) || (pair.ind && pair.ind.yantrana) || '';
+    row.getCell(1).value = serial;
+    row.getCell(2).value = gp;
+    row.getCell(3).value = yantrana;
+    if (pair.pub) {
+      const c = computeCost(pair.pub.kaam, pair.pub.parinam);
+      row.getCell(4).value = pair.pub.upchar || '';
+      row.getCell(5).value = pair.pub.kaam;
+      row.getCell(6).value = (pair.pub.parinam || '') + ' ' + (c.unit || '');
+      row.getCell(7).value = rnd(c.unskilled);
+      row.getCell(8).value = rnd(c.skilled);
+      row.getCell(9).value = Number(pair.pub.itar) || 0;
+      row.getCell(10).value = rnd(c.total);
+      row.getCell(11).value = rnd(c.manday);
+    }
+    if (pair.ind) {
+      const c = computeCost(pair.ind.kaam, pair.ind.parinam);
+      row.getCell(12).value = pair.ind.kutumb;
+      row.getCell(13).value = pair.ind.kaam;
+      row.getCell(14).value = pair.ind.labharthi;
+      row.getCell(15).value = pair.ind.jat;
+      row.getCell(16).value = (pair.ind.parinam || '') + ' ' + (c.unit || '');
+      row.getCell(17).value = rnd(c.unskilled);
+      row.getCell(18).value = rnd(c.skilled);
+      row.getCell(19).value = Number(pair.ind.itar) || 0;
+      row.getCell(20).value = rnd(c.total);
+      row.getCell(21).value = rnd(c.manday);
+    }
+    row.getCell(22).value = { formula: `COUNTA(F${r},P${r})` };
+    row.getCell(23).value = { formula: `G${r}+Q${r}` };
+    row.getCell(24).value = { formula: `H${r}+R${r}` };
+    row.getCell(25).value = { formula: `I${r}+S${r}` };
+    row.getCell(26).value = { formula: `J${r}+T${r}` };
+    row.getCell(27).value = { formula: `K${r}+U${r}` };
+    for (let c=1;c<=27;c++) {
+      row.getCell(c).border = border;
+      row.getCell(c).font = (c<=4) ? { size:11, bold:true } : { size:11 };
+      row.getCell(c).alignment = { wrapText:true, vertical:'middle' };
+    }
+    ['G','H','J','K','Q','R','T','U','W','X','Y','Z','AA'].forEach(L => { row.getCell(colIdx(L)).numFmt = '#,##0'; });
+  }
+
+  function writeBlockSubtotal(ws, r, firstRow, lastRow, fill) {
+    const row = ws.getRow(r);
+    row.getCell(1).value = 'एकुण'; row.getCell(1).font = { bold:true, size:11 };
+    if (lastRow >= firstRow) {
+      row.getCell(6).value = { formula: `COUNTA(F${firstRow}:F${lastRow})` };
+      row.getCell(16).value = { formula: `COUNTA(P${firstRow}:P${lastRow})` };
+      ['G','H','I','J','K','Q','R','S','T','U','V','W','X','Y','Z','AA'].forEach((L) => {
+        row.getCell(colIdx(L)).value = { formula: `SUM(${L}${firstRow}:${L}${lastRow})` };
+      });
+    } else {
+      ['F','P','G','H','I','J','K','Q','R','S','T','U','V','W','X','Y','Z','AA'].forEach((L) => { row.getCell(colIdx(L)).value = 0; });
+    }
+    for (let c=1;c<=27;c++) { row.getCell(c).font = { bold:true, size:11 }; row.getCell(c).fill = fill; row.getCell(c).border = border; row.getCell(c).numFmt = '#,##0'; row.getCell(c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+
+  function writeGrandRow(ws, r, gpSubtotalRow, shSubtotalRow, carryRef) {
+    const row = ws.getRow(r);
+    row.getCell(1).value = 'एकुण एकत्र'; row.getCell(1).font = { bold:true, size:11 };
+    ['F','P','G','H','I','J','K','Q','R','S','T','U','V','W','X','Y','Z','AA'].forEach((L) => {
+      let f = `${L}${gpSubtotalRow}+${L}${shSubtotalRow}`;
+      if (carryRef) f += `+${carryRef.sheet}!${L}${carryRef.row}`;
+      row.getCell(colIdx(L)).value = { formula: f };
+      row.getCell(colIdx(L)).font = { bold:true, size:11 };
+      row.getCell(colIdx(L)).numFmt = '#,##0';
+      row.getCell(colIdx(L)).fill = GRAND;
+      row.getCell(colIdx(L)).border = border;
+      row.getCell(colIdx(L)).alignment = { wrapText:true, vertical:'middle' };
+    });
+    row.getCell(1).fill = GRAND;
+    for (let c=2;c<=5;c++) { row.getCell(c).fill = GRAND; row.getCell(c).border = border; }
+    for (let c=12;c<=16;c++) { row.getCell(c).fill = GRAND; row.getCell(c).border = border; }
+  }
+
+  // ==================== B (व गरज पडल्यास B2, B3... ) — गरजेनुसार रांगा वाढतात, न मावल्यास नवीन पान ====================
+  const bPages = [];
+  let gpIdx = 0, shIdx = 0, pageNum = 1, carryRef = null;
+  do {
+    const gpSlice = gpRowsAll.slice(gpIdx, gpIdx + ROWS_PER_BLOCK);
+    const shSlice = shRowsAll.slice(shIdx, shIdx + ROWS_PER_BLOCK);
+    const sheetName = pageNum === 1 ? 'B' : ('B' + pageNum);
+    const pageLabel = pageNum === 1 ? '' : (' (पान ' + pageNum + ')');
+    const ws = wb.addWorksheet(sheetName, { pageSetup:{ orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0, margins: PAGE_MARGINS, printTitlesRow: '1:6' }, views:[{state:'frozen', ySplit:6}] });
+    writeBHeader(ws, pageLabel);
+
+    let r = 7;
+    const gpFirst = r;
+    gpSlice.forEach((pair, i) => { writePairRow(ws, r, pair, i+1); r++; });
+    const gpLast = r - 1;
+    const gpSubtotalRow = r; writeBlockSubtotal(ws, gpSubtotalRow, gpFirst, gpLast, CYAN); r++;
+
+    const shFirst = r;
+    shSlice.forEach((pair, i) => { writePairRow(ws, r, pair, i+1); r++; });
+    const shLast = r - 1;
+    const shSubtotalRow = r; writeBlockSubtotal(ws, shSubtotalRow, shFirst, shLast, SUBTOTAL_GP); r++;
+
+    const grandRow = r; writeGrandRow(ws, grandRow, gpSubtotalRow, shSubtotalRow, carryRef); r++;
+
+    bPages.push({ sheetName, ws, gpFirst, gpLast, shFirst, shLast, grandRow, gpCount: gpSlice.length, shCount: shSlice.length });
+    carryRef = { sheet: `'${sheetName}'`, row: grandRow };
+    gpIdx += gpSlice.length; shIdx += shSlice.length;
+    pageNum++;
+  } while (gpIdx < gpRowsAll.length || shIdx < shRowsAll.length);
+
+  const lastB = bPages[bPages.length - 1];
+  const B_LAST = `'${lastB.sheetName}'`;
+
+  // ==================== A (महिना-निहाय कुटूंब व मनुष्यदिन) ====================
+  const wa = wb.addWorksheet('A', { pageSetup:{ orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0, margins: PAGE_MARGINS, printTitlesRow: '1:6' } });
+  wa.getCell('A1').value = 'प्रपत्र- अ'; wa.getCell('A1').font = { bold:true, size:20 };
+  wa.getCell('A2').value = 'लेबर बजेट सन ' + saal; wa.getCell('A2').font = { bold:true, size:20 };
+  wa.getCell('A3').value = 'ग्रामपंचायत ' + currentGP + ',  तालुका - ' + taluka + ',  जिल्हा - ' + jilha; wa.getCell('A3').font = { bold:true, size:20 };
+
+  const monthCols = {};
+  MONTHS.forEach((m,i) => { monthCols[m] = 3 + i*2; });
+  function acell(addr, val) {
+    const c = wa.getCell(addr);
+    if (val !== undefined) c.value = val;
+    c.font = { bold:true, size:12 }; c.fill = CYAN;
+    c.alignment = { horizontal:'center', vertical:'middle', wrapText:true }; c.border = border;
+  }
+  const lastMonthCol = monthCols[MONTHS[MONTHS.length-1]] + 1;
+  const aaCol = lastMonthCol + 1;
+  wa.mergeCells(1, 1, 1, aaCol+2); wa.getCell(1,1).alignment = { horizontal:'center', vertical:'middle' };
+  wa.mergeCells(2, 1, 2, aaCol+2); wa.getCell(2,1).alignment = { horizontal:'center', vertical:'middle' };
+  wa.mergeCells(3, 1, 3, aaCol+2); wa.getCell(3,1).alignment = { horizontal:'center', vertical:'middle' };
+  wa.mergeCells(`A4:A6`); acell('A4', 'अ.क्र.');
+  wa.mergeCells(`B4:B6`); acell('B4', 'ग्रामपंचायतीचे नाव');
+  wa.mergeCells(4, 3, 4, lastMonthCol); acell(`C4`, 'महिना निहाय मागणी केलेल्या कुटूंबाचा व मनुष्यदिन निर्मीतीचा तपशील');
+  wa.mergeCells(4, aaCol, 4, aaCol+2); acell(wa.getColumn(aaCol).letter + '4', 'एकुण');
+  MONTHS.forEach((m) => {
+    const c = monthCols[m];
+    wa.mergeCells(5, c, 5, c+1);
+    acell(wa.getColumn(c).letter + '5', m);
+    acell(wa.getColumn(c).letter + '6', 'कुटूंब संख्या');
+    acell(wa.getColumn(c+1).letter + '6', 'मनुष्य दिन');
+  });
+  acell(wa.getColumn(aaCol).letter + '6', 'कुटूंब संख्या');
+  acell(wa.getColumn(aaCol+1).letter + '6', 'मनुष्य दिन');
+  acell(wa.getColumn(aaCol+2).letter + '6', 'मुल्य (₹)');
+
+  const FIRST_A = 7, LAST_A = 10;
+  const totalRef = String(kutumbTotalCount || 0);
+  const mandayGrandRef = `${B_LAST}!AA${lastB.grandRow}`;
+  const aaLetter = wa.getColumn(aaCol).letter, abLetter = wa.getColumn(aaCol+1).letter, acLetter = wa.getColumn(aaCol+2).letter;
+
+  for (let dr = FIRST_A; dr <= LAST_A; dr++) {
+    if (dr === FIRST_A) { wa.getCell(dr,1).value = 1; wa.getCell(dr,2).value = currentGP; }
+    MONTHS.forEach((m) => {
+      const c = monthCols[m];
+      const famLetter = wa.getColumn(c).letter, mdLetter = wa.getColumn(c+1).letter;
+      const famCell = famLetter + dr, mdCell = mdLetter + dr;
+      if (dr !== FIRST_A || EXCLUDED_MONTHS.includes(m)) {
+        wa.getCell(famCell).value = 0; wa.getCell(mdCell).value = 0;
+      } else {
+        const pct = MONTH_PERCENT[m];
+        wa.getCell(famCell).value = { formula: `ROUND(${totalRef}*${pct/100},0)` };
+        wa.getCell(mdCell).value = { formula: `(${abLetter}${dr}*${pct}%)` };
+      }
+      wa.getCell(famCell).numFmt = '#,##0'; wa.getCell(mdCell).numFmt = '#,##0.00';
+    });
+    if (dr === FIRST_A) {
+      // "एकुण कुटूंब संख्या" थेट अ‍ॅपच्या लॉगिन पानावरून आलेल्या आकड्याइतकीच (सम्पल फाईलचं मूळ, चुकीचा आकडा देणारं सूत्र इथे वापरलेलं नाही)
+      wa.getCell(aaLetter + dr).value = { formula: totalRef };
+      wa.getCell(abLetter + dr).value = { formula: mandayGrandRef };
+      // मुल्य = शीट B च्या (शेवटच्या पानाच्या) "एकुण अकुशल रक्कम" शी तंतोतंत जुळणारी लिंक — वेगळं सूत्र वापरून
+      // वेगळा आकडा येऊ नये म्हणून थेट संदर्भ (आधी मनुष्यदिन × मजुरी दर असं वेगळं काढलं जायचं, तेच फरकाचं कारण होतं)
+      wa.getCell(acLetter + dr).value = { formula: `${B_LAST}!W${lastB.grandRow}` };
+    } else {
+      wa.getCell(aaLetter + dr).value = 0; wa.getCell(abLetter + dr).value = 0; wa.getCell(acLetter + dr).value = 0;
+    }
+    wa.getCell(aaLetter + dr).font = { bold:true, size:11 };
+    wa.getCell(abLetter + dr).font = { bold:true, size:11 };
+    wa.getCell(acLetter + dr).numFmt = '#,##0';
+    for (let c=1;c<=aaCol+2;c++) { wa.getCell(dr,c).border = border; if (!wa.getCell(dr,c).font || !wa.getCell(dr,c).font.size) wa.getCell(dr,c).font = { size:11 }; wa.getCell(dr,c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+  const totalRowA = LAST_A + 1;
+  wa.getCell(totalRowA,1).value = 'एकुण'; wa.getCell(totalRowA,1).font = { bold:true, size:11 };
+  for (let c=3;c<=aaCol+2;c++) {
+    const L = wa.getColumn(c).letter;
+    wa.getCell(totalRowA,c).value = { formula: `SUM(${L}${FIRST_A}:${L}${LAST_A})` };
+    wa.getCell(totalRowA,c).font = { bold:true, size:11 };
+    wa.getCell(totalRowA,c).border = border;
+    wa.getCell(totalRowA,c).alignment = { wrapText:true, vertical:'middle' };
+  }
+  wa.getRow(totalRowA).eachCell({ includeEmpty:true }, cell => { cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFFDF0DD'} }; });
+  wa.getColumn(1).width = 8; wa.getColumn(2).width = 20;
+  for (let c=3;c<=aaCol+2;c++) wa.getColumn(c).width = 10;
+
+  // ==================== C (तालुका गोषवारा) — B च्या प्रत्येक पानाला मिरर करणारं तितकंच पान (C, C2, C3...) ====================
+  function ccell(ws, addr, val) {
+    const c = ws.getCell(addr);
+    if (val !== undefined) c.value = val;
+    c.font = { bold:true, size:12 }; c.fill = CYAN;
+    c.alignment = { horizontal:'center', vertical:'middle', wrapText:true }; c.border = border;
+    return c;
+  }
+  function writeCHeader(ws, pageLabel) {
+    ws.getCell('A1').value = 'तालुका गोषवारा' + pageLabel; ws.getCell('A1').font = { bold:true, size:20, color:TITLE_COLOR };
+    ws.getCell('A2').value = schemeName + ' सन- ' + saal; ws.getCell('A2').font = { bold:true, size:20, color:TITLE_COLOR };
+    ws.getCell('A3').value = 'तालुका - ' + taluka + ', जिल्हा - ' + jilha; ws.getCell('A3').font = { bold:true, size:20 };
+    [1,2,3].forEach(rn => { ws.mergeCells(rn,1,rn,23); ws.getCell(rn,1).alignment = { horizontal:'center', vertical:'middle' }; ws.getRow(rn).height = 23; });
+    [['A5:A6','अ.क्र.'],['B5:B6','यंत्रणा'],['C5:C6','उपचार'],['D5:J5','सार्वजनिक कामे'],['K5:Q5','वैयक्तीक कामे'],['R5:W5','एकुण']]
+      .forEach(([m,v]) => { ws.mergeCells(m); ccell(ws, m.split(':')[0], v); });
+    [['D6','कामाचे नाव'],['E6','परिणाम'],['F6','अकुशल'],['G6','कुशल'],['H6','इतर योजना'],['I6','एकुण'],['J6','मनुष्यदिन'],
+     ['K6','कुटूंब रचना'],['L6','कामाचे नाव'],['M6','परिणाम'],['N6','अकुशल'],['O6','कुशल'],['P6','एकुण'],['Q6','मनुष्यदिन'],
+     ['R6','परिणाम'],['S6','अकुशल'],['T6','कुशल'],['U6','इतर योजना'],['V6','एकुण'],['W6','मनुष्यदिन']].forEach(([a,v]) => ccell(ws, a, v));
+    ws.getRow(5).height = 22; ws.getRow(6).height = 30;
+    const cWidths = {A:8,B:18,C:22,D:24,E:12,F:12,G:11,H:12,I:12,J:11,K:15,L:20,M:12,N:12,O:11,P:12,Q:11,R:10,S:12,T:11,U:12,V:12,W:11};
+    Object.keys(cWidths).forEach(L => { ws.getColumn(L).width = cWidths[L]; });
+  }
+  function writeCRowFromB(ws, cRow, bSheetRef, bRow) {
+    const row = ws.getRow(cRow);
+    row.getCell(1).value = { formula: `${bSheetRef}!A${bRow}` };
+    row.getCell(3).value = { formula: `${bSheetRef}!D${bRow}` };
+    row.getCell(4).value = { formula: `${bSheetRef}!E${bRow}` };
+    row.getCell(5).value = { formula: `${bSheetRef}!F${bRow}` };
+    row.getCell(6).value = { formula: `${bSheetRef}!G${bRow}` };
+    row.getCell(7).value = { formula: `${bSheetRef}!H${bRow}` };
+    row.getCell(8).value = { formula: `${bSheetRef}!I${bRow}` };
+    row.getCell(9).value = { formula: `${bSheetRef}!J${bRow}` };
+    row.getCell(10).value = { formula: `${bSheetRef}!K${bRow}` };
+    row.getCell(11).value = { formula: `${bSheetRef}!L${bRow}` };
+    row.getCell(12).value = { formula: `${bSheetRef}!M${bRow}` };
+    row.getCell(13).value = { formula: `${bSheetRef}!P${bRow}` };
+    row.getCell(14).value = { formula: `${bSheetRef}!Q${bRow}` };
+    row.getCell(15).value = { formula: `${bSheetRef}!R${bRow}` };
+    row.getCell(16).value = { formula: `SUM(${bSheetRef}!Q${bRow},${bSheetRef}!R${bRow},${bSheetRef}!S${bRow})` };
+    row.getCell(17).value = { formula: `${bSheetRef}!U${bRow}` };
+    row.getCell(18).value = { formula: `${bSheetRef}!V${bRow}` };
+    row.getCell(19).value = { formula: `${bSheetRef}!W${bRow}` };
+    row.getCell(20).value = { formula: `${bSheetRef}!X${bRow}` };
+    row.getCell(21).value = { formula: `${bSheetRef}!Y${bRow}` };
+    row.getCell(22).value = { formula: `${bSheetRef}!Z${bRow}` };
+    row.getCell(23).value = { formula: `${bSheetRef}!AA${bRow}` };
+    for (let c=1;c<=23;c++) { row.getCell(c).border = border; row.getCell(c).font = { size:11 }; row.getCell(c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+  function writeCSubtotal(ws, cRow, firstC, lastC, fill) {
+    const row = ws.getRow(cRow);
+    row.getCell(2).value = 'एकुण'; row.getCell(2).font = { bold:true, size:11 };
+    if (lastC >= firstC) {
+      row.getCell(5).value = { formula: `COUNTA(E${firstC}:E${lastC})` };
+      row.getCell(13).value = { formula: `COUNTA(M${firstC}:M${lastC})` };
+      ['F','G','H','I','J','N','O','P','Q','R','S','T','U','V','W'].forEach((L) => {
+        row.getCell(L).value = { formula: `SUM(${L}${firstC}:${L}${lastC})` };
+        row.getCell(L).font = { bold:true, size:11 };
+      });
+    } else {
+      ['E','M','F','G','H','I','J','N','O','P','Q','R','S','T','U','V','W'].forEach((L) => { row.getCell(L).value = 0; row.getCell(L).font = { bold:true, size:11 }; });
+    }
+    for (let c=1;c<=23;c++) { row.getCell(c).fill = fill; row.getCell(c).border = border; row.getCell(c).numFmt = '#,##0'; row.getCell(c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+  function writeCGrand(ws, cRow, gpSubtotalRow, shSubtotalRow, carry) {
+    const row = ws.getRow(cRow);
+    row.getCell(2).value = 'एकुण एकंदर'; row.getCell(2).font = { bold:true, size:11 };
+    ['E','F','G','H','I','J','M','N','O','P','Q','R','S','T','U','V','W'].forEach((L) => {
+      let f = `${L}${gpSubtotalRow}+${L}${shSubtotalRow}`;
+      if (carry) f += `+${carry.sheet}!${L}${carry.row}`;
+      row.getCell(L).value = { formula: f };
+      row.getCell(L).font = { bold:true, size:11 };
+      row.getCell(L).numFmt = '#,##0';
+    });
+    for (let c=1;c<=23;c++) { row.getCell(c).fill = GRAND; row.getCell(c).border = border; row.getCell(c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+
+  let cCarry = null;
+  bPages.forEach((page, idx) => {
+    const cSheetName = idx === 0 ? 'C' : ('C' + (idx+1));
+    const cPageLabel = idx === 0 ? '' : (' (पान ' + (idx+1) + ')');
+    const wc = wb.addWorksheet(cSheetName, { pageSetup:{ orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0, margins: PAGE_MARGINS, printTitlesRow: '1:6' } });
+    writeCHeader(wc, cPageLabel);
+    const bRef = `'${page.sheetName}'`;
+    if (page.gpCount > 0) {
+      wc.getCell(page.gpFirst,1).value = 'अ'; wc.getCell(page.gpFirst,1).font = { bold:true, size:11 };
+      wc.getCell(page.gpFirst,2).value = 'ग्रामपंचायत यंत्रणा'; wc.getCell(page.gpFirst,2).font = { bold:true, size:11 };
+      for (let rr=page.gpFirst; rr<=page.gpLast; rr++) writeCRowFromB(wc, rr, bRef, rr);
+    }
+    const gpSubtotalRow = page.gpFirst > page.gpLast ? page.gpFirst : page.gpLast+1;
+    writeCSubtotal(wc, gpSubtotalRow, page.gpFirst, page.gpLast, CYAN);
+
+    if (page.shCount > 0) {
+      wc.getCell(page.shFirst,1).value = 'ब'; wc.getCell(page.shFirst,1).font = { bold:true, size:11 };
+      wc.getCell(page.shFirst,2).value = 'शासकीय यंत्रणा'; wc.getCell(page.shFirst,2).font = { bold:true, size:11 };
+      for (let rr=page.shFirst; rr<=page.shLast; rr++) writeCRowFromB(wc, rr, bRef, rr);
+    }
+    const shSubtotalRow = page.shFirst > page.shLast ? page.shFirst : page.shLast+1;
+    writeCSubtotal(wc, shSubtotalRow, page.shFirst, page.shLast, SUBTOTAL_GP);
+
+    writeCGrand(wc, page.grandRow, gpSubtotalRow, shSubtotalRow, cCarry);
+    cCarry = { sheet: `'${cSheetName}'`, row: page.grandRow };
+  });
+
+  // ==================== D (उपचार निहाय गोषवारा — कामांची संख्या; थेट अ‍ॅपमधील डेटावरून मोजलेली, "कामाचा प्रकार" स्तंभ काढलेला) ====================
+  const wd = wb.addWorksheet('D', { pageSetup:{ orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0, margins: PAGE_MARGINS, printTitlesRow: '1:7' } });
+  wd.getCell('A1').value = 'उपचार निहाय गोषवारा'; wd.getCell('A1').font = { bold:true, size:20, color:TITLE_COLOR };
+  wd.getCell('A2').value = schemeName + ' सन- ' + saal + ' '; wd.getCell('A2').font = { bold:true, size:20, color:TITLE_COLOR };
+  wd.getCell('A3').value = 'ग्रामपंचायत - ' + currentGP + ', तालुका - ' + taluka + ', जिल्हा - ' + jilha; wd.getCell('A3').font = { bold:true, size:20 };
+  wd.getCell('A4').value = 'सार्वजनिक व वैयक्तिक कामांचा उपचार निहाय गोषवारा (ग्रामपंचायत व शासकीय यंत्रणा)'; wd.getCell('A4').font = { bold:true, size:12 };
+  const dTotalCols = 2 + UPCHAR.length + KUTUMB.length + 1;
+  const kutumbStartCol = 3 + UPCHAR.length;
+  [1,2,3,4].forEach(rn => { wd.mergeCells(rn,1,rn,dTotalCols); wd.getCell(rn,1).alignment = { horizontal:'center', vertical:'middle' }; });
+
+  function dcell(r, c, val) {
+    const cell = wd.getCell(r,c);
+    if (val !== undefined) cell.value = val;
+    cell.font = { bold:true, size:12 }; cell.fill = CYAN;
+    cell.alignment = { horizontal:'center', vertical:'middle', wrapText:true }; cell.border = border;
+    return cell;
+  }
+  wd.mergeCells(6,1,7,1); dcell(6,1,'अ.न.');
+  wd.mergeCells(6,2,7,2); dcell(6,2,'यंत्रणा');
+  wd.mergeCells(6,3,6,2+UPCHAR.length); dcell(6,3,'सार्वजनिक कामे (उपचार गट निहाय कामांची संख्या)');
+  wd.mergeCells(6,kutumbStartCol,6,kutumbStartCol+KUTUMB.length-1); dcell(6,kutumbStartCol,'वैयक्तिक कामे (कुटूंब रचना निहाय कामांची संख्या)');
+  wd.mergeCells(6,dTotalCols,7,dTotalCols); dcell(6,dTotalCols,'एकुण');
+  UPCHAR.forEach((u,i) => dcell(7, 3+i, u));
+  KUTUMB.forEach((k,i) => dcell(7, kutumbStartCol+i, k));
+  wd.getRow(6).height = 24; wd.getRow(7).height = 46;
+
+  function writeDRow(dRow, label, yantranaVal) {
+    wd.getCell(dRow,1).value = label; wd.getCell(dRow,1).font = { bold:true, size:11 };
+    wd.getCell(dRow,2).value = yantranaVal; wd.getCell(dRow,2).font = { bold:true, size:11 };
+    const isGP = yantranaVal === 'ग्रामपंचायत यंत्रणा';
+    const pubList = entries.filter(e => e.kind === 'public' && (isGP ? e.yantrana === 'ग्रामपंचायत यंत्रणा' : e.yantrana !== 'ग्रामपंचायत यंत्रणा'));
+    const indList = entries.filter(e => e.kind === 'individual' && (isGP ? e.yantrana === 'ग्रामपंचायत यंत्रणा' : e.yantrana !== 'ग्रामपंचायत यंत्रणा'));
+    let rowTotal = 0;
+    UPCHAR.forEach((u,i) => {
+      const cnt = pubList.filter(e => e.upchar === u).length;
+      wd.getCell(dRow, 3+i).value = cnt; wd.getCell(dRow, 3+i).font = { size:11 };
+      rowTotal += cnt;
+    });
+    KUTUMB.forEach((k,i) => {
+      const cnt = indList.filter(e => e.kutumb === k).length;
+      wd.getCell(dRow, kutumbStartCol+i).value = cnt; wd.getCell(dRow, kutumbStartCol+i).font = { size:11 };
+      rowTotal += cnt;
+    });
+    wd.getCell(dRow, dTotalCols).value = rowTotal;
+    wd.getCell(dRow, dTotalCols).font = { bold:true, size:11 };
+    for (let c=1;c<=dTotalCols;c++) { wd.getCell(dRow,c).border = border; wd.getCell(dRow,c).alignment = { wrapText:true, vertical:'middle' }; }
+  }
+  function writeDSubtotal(dRow, dataRow) {
+    wd.getCell(dRow,2).value = 'एकुण'; wd.getCell(dRow,2).font = { bold:true, size:11 };
+    for (let c=3;c<=dTotalCols;c++) {
+      const L = wd.getColumn(c).letter;
+      wd.getCell(dRow,c).value = { formula: `SUM(${L}${dataRow}:${L}${dataRow})` };
+      wd.getCell(dRow,c).font = { bold:true, size:11 };
+      wd.getCell(dRow,c).alignment = { wrapText:true, vertical:'middle' };
+    }
+  }
+  writeDRow(9, 'अ', 'ग्रामपंचायत यंत्रणा');
+  writeDSubtotal(10, 9);
+  for (let c=1;c<=dTotalCols;c++) { wd.getCell(10,c).fill = SUBTOTAL_GP; wd.getCell(10,c).border = border; }
+  writeDRow(12, 'ब', 'शासकीय यंत्रणा');
+  writeDSubtotal(13, 12);
+  for (let c=1;c<=dTotalCols;c++) { wd.getCell(13,c).fill = SUBTOTAL_SH; wd.getCell(13,c).border = border; }
+  wd.getCell(15,2).value = 'एकुण एकंदर'; wd.getCell(15,2).font = { bold:true, size:11 };
+  for (let c=3;c<=dTotalCols;c++) {
+    const L = wd.getColumn(c).letter;
+    wd.getCell(15,c).value = { formula: `SUM(${L}10,${L}13)` };
+    wd.getCell(15,c).font = { bold:true, size:11 };
+    wd.getCell(15,c).fill = GRAND;
+    wd.getCell(15,c).border = border;
+    wd.getCell(15,c).alignment = { wrapText:true, vertical:'middle' };
+  }
+  wd.getColumn(1).width = 8; wd.getColumn(2).width = 20;
+  for (let c=3;c<=dTotalCols;c++) wd.getColumn(c).width = 16;
+
+  return wb;
+}
+
+async function downloadExcel() {
+  showToast('Excel तयार करत आहे...');
+  try {
+    const wb = await buildWorkbookFresh();
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'समृद्धी_बजेट_' + (currentGP || 'गाव') + '.xlsx';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    if (lastLogoError) {
+      alert('Excel डाउनलोड झाली ✓ — पण लोगो टाकता आला नाही:\n\n' + lastLogoError);
+    } else {
+      showToast('Excel डाउनलोड झाली ✓');
+    }
+  } catch (err) {
+    console.error('excel export failed', err);
+    alert('Excel तयार करताना त्रुटी आली: ' + err.message);
+  }
+}
+
+// ===================== प्रिंट (व PDF-सेव्ह) =====================
+function buildPrintHTML() {
+  let rows = '';
+  entries.forEach((e,i) => {
+    if (e.kind === 'public') {
+      rows += `<tr><td>${i+1}</td><td>${e.gp}</td><td>${e.yantrana}</td><td>${e.upchar}</td>
+        <td>${e.kaam}</td><td>${e.parinam} ${e.unit}</td><td>${Math.round(e.unskilled)}</td><td>${Math.round(e.skilled)}</td>
+        <td>${Math.round(e.itar)}</td><td>${Math.round(e.ekuun)}</td><td>${fmtNum(e.manday)}</td>
+        <td colspan="6"></td>
+        <td>1</td><td>${Math.round(e.unskilled)}</td><td>${Math.round(e.skilled)}</td><td>${Math.round(e.itar)}</td><td>${Math.round(e.ekuun)}</td><td>${fmtNum(e.manday)}</td></tr>`;
+    } else {
+      rows += `<tr><td>${i+1}</td><td>${e.gp}</td><td>${e.yantrana}</td><td></td>
+        <td colspan="6"></td>
+        <td>${e.kutumb}</td><td>${e.kaam}</td><td>${e.labharthi}</td><td>${e.jat}</td><td>${e.parinam} ${e.unit}</td>
+        <td>${Math.round(e.unskilled)}</td><td>${Math.round(e.skilled)}</td><td>${Math.round(e.itar)}</td><td>${Math.round(e.ekuun)}</td><td>${fmtNum(e.manday)}</td>
+        <td>1</td><td>${Math.round(e.unskilled)}</td><td>${Math.round(e.skilled)}</td><td>${Math.round(e.itar)}</td><td>${Math.round(e.ekuun)}</td><td>${fmtNum(e.manday)}</td></tr>`;
+    }
+  });
+
+  function sumBy(yantranaName, field) {
+    return entries.filter(e => e.yantrana === yantranaName).reduce((s,e) => s + (e[field]||0), 0);
+  }
+  const yantranaList = [...new Set(entries.map(e => e.yantrana))];
+  if (!yantranaList.includes('ग्रामपंचायत यंत्रणा')) yantranaList.unshift('ग्रामपंचायत यंत्रणा');
+  if (!yantranaList.includes('शासकीय यंत्रणा')) yantranaList.push('शासकीय यंत्रणा');
+  let sumRows = '';
+  let gU=0,gS=0,gI=0,gE=0,gM=0;
+  yantranaList.forEach(y => {
+    const u = sumBy(y,'unskilled'), s = sumBy(y,'skilled'), it = sumBy(y,'itar'), ek = sumBy(y,'ekuun'), md = sumBy(y,'manday');
+    gU+=u; gS+=s; gI+=it; gE+=ek; gM+=md;
+    sumRows += `<tr><td style="font-weight:700">${y}</td><td>${Math.round(u)}</td><td>${Math.round(s)}</td><td>${Math.round(it)}</td><td>${Math.round(ek)}</td><td>${fmtNum(md)}</td></tr>`;
+  });
+  sumRows += `<tr style="background:#fdf0dd; font-weight:700;"><td>एकुण ग्रँड टोटल</td><td>${Math.round(gU)}</td><td>${Math.round(gS)}</td><td>${Math.round(gI)}</td><td>${Math.round(gE)}</td><td>${fmtNum(gM)}</td></tr>`;
+
+  return `
+  <div style="font-family:'Noto Sans Devanagari',sans-serif; padding:10px;">
+    <div style="text-align:center; font-weight:700; font-size:12px; color:#166534;">${schemeName || DEFAULT_SCHEME_NAME}</div>
+    <div style="text-align:center; font-weight:700; font-size:22px; color:#002060;"> आराखडा </div>
+    <div style="text-align:center; font-weight:700; font-size:13px; color:#002060;">सन ${currentSaal || '२०२४ - २०२५'} साठी ग्रामपंचायत निहाय कामाचे नियोजन (WORK PROJECTION)</div>
+    <div style="text-align:center; font-weight:700; font-size:14px; color:#002060; margin-bottom:8px;">ग्रामपंचायत ${currentGP}, तालुका ${currentTaluka || 'सातारा'}, जि.${currentJilha || 'सातारा'} (रक्कम रुपयांत)</div>
+    <table style="width:100%; border-collapse:collapse; font-size:9px;" border="1">
+      <thead>
+        <tr style="background:#00FFFF;">
+          <th>अ.क्र.</th><th>ग्रामपंचायत</th><th>यंत्रणा</th><th>कामाचा प्रकार</th>
+          <th colspan="7">सार्वजनिक कामे (नाव, परिमाण, अकुशल, कुशल, इतर, एकुण, मनुष्यदिन)</th>
+          <th colspan="6">वैयक्तीक कामे (कुटूंब, नाव, लाभार्थी, प्रवर्ग, परिमाण, ...)</th>
+          <th colspan="6">एकुण (संख्या, अकुशल, कुशल, इतर, एकुण, मनुष्यदिन)</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="font-weight:700; font-size:13px; color:#002060; margin:16px 0 6px;">यंत्रणा-निहाय बेरीज (ग्रामपंचायत यंत्रणा वि. इतर/शासकीय यंत्रणा)</div>
+    <table style="border-collapse:collapse; font-size:10px; min-width:420px;" border="1">
+      <thead><tr style="background:#00FFFF;"><th>यंत्रणा</th><th>अकुशल (₹)</th><th>कुशल (₹)</th><th>इतर योजना (₹)</th><th>एकुण (₹)</th><th>मनुष्यदिन</th></tr></thead>
+      <tbody>${sumRows}</tbody>
+    </table>
+  </div>`;
+}
+function triggerPrint() {
+  document.getElementById('printArea').innerHTML = buildPrintHTML();
+  window.print();
+}
+
+// ===================== सुरुवात =====================
+populateStaticDropdowns();
+loadEntries();
+loadGSUrl().then(() => { refreshListsFromSheet(); initAuth(); }); // गाव उघडणे (loadVillage) लॉगिन झाल्यावर onSignedIn() मधून होते
+loadKutumbTotal();
+loadLocalBranding();
+
+// टीप: इथे मुद्दाम कोणताही वेळोवेळी (टायमरने) होणारा auto-refresh ठेवलेला नाही —
+// फॉर्म भरत असताना अचानक यादी पुन्हा-रेंडर झाल्यास निवडलेला/टाईप केलेला डेटा
+// गायब होऊ शकतो. त्याऐवजी sync फक्त या ठिकाणी होते: (1) अ‍ॅप उघडताच एकदा, आणि
+// (2) प्रत्येक काम यशस्वीरित्या "जतन" झाल्यानंतर (savePublic/saveIndividual मध्ये).
+</script>
+</body>
+</html>
