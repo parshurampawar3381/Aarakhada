@@ -170,6 +170,7 @@
 <!-- ===================== (v9) Google लॉगिन ===================== -->
 <div class="gate" id="loginScreen" style="display:none; position:fixed; inset:0; z-index:1500; background:var(--paper); overflow:auto;">
   <div class="gatecard">
+    <div id="loginBrand" style="text-align:center; font-weight:700; color:#14532d; margin-bottom:8px; user-select:none;">समृद्धी लेबर बजेट</div>
     <h2>Google खात्याने लॉगिन करा</h2>
     <p>तुम्ही निवडलेल्या Gmail खात्यानेच अ‍ॅप चालेल. तुमचा सर्व डेटा तुमच्याच Google Drive मधील <b>"गावांचा डेटा — समृद्धी अ‍ॅप"</b> फोल्डरमध्ये सेव्ह होईल — ॲडमिनच्या Drive मध्ये काहीही साठवले जात नाही. अ‍ॅपला फक्त स्वतः बनवलेल्या फाईल्स दिसतात, तुमच्या इतर Drive फाईल्स दिसत नाहीत.</p>
     <button class="btn btn-primary" id="loginBtn" onclick="signInUser()">🔐 Google ने लॉगिन करा</button>
@@ -181,9 +182,12 @@
 <div class="gate" id="gateScreen">
   <div class="gatecard">
     <div class="gatelogo" id="gateLogoWrap" style="display:none"><img id="gateLogoImg" alt="योजना लोगो"></div>
+    <div id="gateBrand" style="text-align:center; font-weight:700; color:#14532d; margin-bottom:8px; user-select:none;">समृद्धी लेबर बजेट</div>
     <div id="userRowGate" style="display:none; text-align:center; font-size:12px; color:#6b736c; margin-bottom:10px;">👤 <b id="userEmailGate"></b> · <a href="#" onclick="signOutUser(); return false;" style="color:#6b736c; text-decoration:underline;">लॉगआउट / खाते बदला</a></div>
-    <h2>तपशील निवडा</h2>
-    <p>जिल्हा → तालुका → गाव या क्रमाने निवडा. आधी याच गावाचा याच वर्षाचा डेटा भरलेला असेल तर तो आपोआप इथेच उघडेल (नवीन एक्सेल बनणार नाही, त्याच डेटामध्ये पुढे भरता येईल).</p>
+    <div id="gateInfoWrap" style="display:none; margin-bottom:12px;">
+      <h2 style="margin-bottom:8px;">उपयुक्त माहिती</h2>
+      <div id="gatePdfArea"></div>
+    </div>
     <div class="field">
       <label>जिल्हा</label>
       <select id="gateJilha" onchange="onGateJilhaChange()"><option value="">-- जिल्हा निवडा --</option></select>
@@ -228,7 +232,6 @@
     <button class="btn btn-primary" onclick="confirmVillage()">निश्चित करा व पुढे जा</button>
     <p class="err" id="gateErr"></p>
     <p style="text-align:center; margin-top:14px;">
-      <a href="#" onclick="adminLogin(); return false;" style="color:#6b736c; font-size:12.5px; text-decoration:underline;">ॲडमिन लॉगिन</a>
       <span id="adminStatusGate" style="display:none; color:#14532d; font-weight:700; font-size:12.5px;"> · ✓ ॲडमिन म्हणून लॉगिन झाले</span>
       <br>
       <button class="browserLinkBtn" onclick="openBrowserModal()" style="margin-top:8px;">🔗 ब्राउझरमध्ये उघडा / लिंक पाठवा</button>
@@ -252,7 +255,6 @@
       <button class="navbtn navbtn-exit" onclick="exitApp()">⏻ बाहेर पडा</button>
     </div>
     <div class="gpbadge">गाव: <b id="gpBadgeName"></b> · <span id="gpBadgeExtra"></span>
-      <a href="#" onclick="adminLogin(); return false;" id="adminLoginLinkApp" style="margin-left:10px; color:#6b736c; font-size:11.5px; text-decoration:underline;">ॲडमिन लॉगिन</a>
       <span id="adminStatusApp" style="display:none; color:#14532d; font-weight:700; font-size:11.5px;"> · ✓ ॲडमिन</span>
       <span id="userChipApp" style="display:none; margin-left:10px; font-size:11.5px;">👤 <span id="userEmailApp"></span> <a href="#" onclick="signOutUser(); return false;" style="color:#cfe6d6; text-decoration:underline;">लॉगआउट</a></span>
       <button class="browserLinkBtn" onclick="openBrowserModal()" style="margin-left:10px; font-size:11.5px;">🔗 ब्राउझर/शेअर</button>
@@ -465,6 +467,53 @@
   </div>
 </div>
 
+
+<!-- ===================== (v9.3) ॲडमिन लॉगिन पान (लोगो/शीर्षक ७ वेळा दाबल्यावर उघडते) ===================== -->
+<div class="gate" id="adminLoginScreen" style="display:none; position:fixed; inset:0; z-index:2000; background:var(--paper); overflow:auto;">
+  <div class="gatecard">
+    <h2>ॲडमिन लॉगिन</h2>
+    <div class="field"><label>ॲडमिन पासवर्ड</label>
+      <input type="password" id="adminPwdInput" placeholder="ॲडमिन पासवर्ड" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <button class="btn btn-primary" onclick="doAdminLogin()">लॉगिन करा</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeAdminLogin()">रद्द करा</button>
+    <p class="err" id="adminLoginErr" style="display:none"></p>
+  </div>
+</div>
+
+<!-- ===================== (v9.3) ॲडमिन पॅनेल ===================== -->
+<div class="gate" id="adminPanel" style="display:none; position:fixed; inset:0; z-index:1900; background:var(--paper); overflow:auto; align-items:flex-start;">
+  <div class="gatecard" style="max-width:640px;">
+    <h2>⚙ ॲडमिन पॅनेल <span style="font-size:12px; color:#14532d;">✓ लॉगिन आहे</span></h2>
+    <div class="card" style="margin-bottom:12px;">
+      <h3 style="margin:0 0 6px;">मुख्य Google Sheet</h3>
+      <p class="sub">कामांची यादी (Data-सूची), दर, योजनेचे नाव, गावांची यादी, पासवर्ड, लॉग हे सर्व इथे पाहता व बदलता येते. बदल सर्व वापरकर्त्यांना ≤ ३० मिनिटांत आपोआप दिसतात.</p>
+      <a id="adminSheetLink" class="btn btn-secondary" style="display:inline-block; text-decoration:none;" href="#" target="_blank" rel="noopener">📄 मुख्य Sheet उघडा / बदल करा</a>
+      <p class="hint" id="adminSheetMissing" style="display:none">Sheet ची लिंक मिळाली नाही — Apps Script चा नवीन कोड Deploy (New version) करा.</p>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <h3 style="margin:0 0 6px;">"माहिती" (PDF) यादी</h3>
+      <div id="adminPdfList"></div>
+      <div class="field"><label>शीर्षक</label><input type="text" id="apTitle" placeholder="उदा. अ‍ॅप कसे वापरावे"></div>
+      <div class="field"><label>PDF / Drive लिंक (https://...)</label><input type="text" id="apUrl" placeholder="https://drive.google.com/..."></div>
+      <div class="field"><label>थोडक्यात वर्णन (ऐच्छिक)</label><input type="text" id="apDesc"></div>
+      <button class="btn btn-primary" onclick="adminPdfAdd()">➕ यादीत जोडा</button>
+      <p class="ok" id="apOk" style="display:none"></p><p class="err" id="apErr" style="display:none"></p>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <h3 style="margin:0 0 6px;">गावाचा पासवर्ड रिसेट करा</h3>
+      <div class="field"><label>जिल्हा</label><input type="text" id="apJilha"></div>
+      <div class="field"><label>तालुका</label><input type="text" id="apTaluka"></div>
+      <div class="field"><label>गाव</label><input type="text" id="apGav"></div>
+      <div class="field"><label>नवीन पासवर्ड</label><input type="text" id="apNewPwd"></div>
+      <button class="btn btn-secondary" onclick="adminPanelResetPwd()">पासवर्ड रिसेट करा</button>
+      <p class="ok" id="apRstOk" style="display:none">पासवर्ड रिसेट झाला ✓</p><p class="err" id="apRstErr" style="display:none"></p>
+    </div>
+    <button class="btn btn-primary" onclick="closeAdminPanel()">बंद करा</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="adminLogout()">ॲडमिन लॉगआउट</button>
+  </div>
+</div>
+<button id="adminFab" onclick="openAdminPanel()" style="display:none; position:fixed; right:14px; bottom:14px; z-index:1800; border:none; border-radius:30px; padding:11px 16px; background:#14532d; color:#fff; font-weight:700; box-shadow:0 3px 10px rgba(0,0,0,.3);">⚙ ॲडमिन</button>
+
 <div class="toast" id="toast"></div>
 <div id="printArea"></div>
 
@@ -522,7 +571,7 @@ if (window.AndroidBridge) {
 // प्रोजेक्टच्या package name + SHA-1 वरून Google Cloud मध्ये नोंदवला जातो (सेटअप मार्गदर्शक पहा).
 const GOOGLE_WEB_CLIENT_ID = '53446006420-gnqjn3njiegi6joa59phg7mpjgkpu0b6.apps.googleusercontent.com';
 // (ऐच्छिक) हे HTML तुम्ही इंटरनेटवर कुठे ठेवले आहे त्याची लिंक — APK मधील "ब्राउझर/शेअर" बटणासाठी
-const PUBLIC_WEB_URL = 'https://script.google.com/macros/s/AKfycby5ubFKVP1OVeHATWMFOOwgirrbQbbD7PCOGA1GF3NKLecSFLamspmDcVH6Srl_aguV/exec';
+const PUBLIC_WEB_URL = 'https://parshurampawar3381.github.io/Aarakhada/';
 // फक्त "drive.file" — अ‍ॅपला फक्त स्वतः बनवलेल्या फाईल्स दिसतात; वापरकर्त्याच्या इतर Drive फाईल्स दिसत नाहीत
 const GOOGLE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets';
@@ -1178,7 +1227,7 @@ async function signOutUser() {
 const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbzQfVP5eEpWuaVG319XbzKv-uVvWQycoVMDujZ778AbPMP6oq6dZM3fk1fyx9IDVcys/exec';
 // GS फाईलमधल्या SCRIPT_VERSION शी जुळणारा आकडा — जुळत नसेल तर विकसकाने कोड बदलल्यानंतर
 // "Deploy → Manage deployments → New version → Deploy" द्यायचं राहिलं आहे असं समजायचं
-const EXPECTED_SCRIPT_VERSION = 10;
+const EXPECTED_SCRIPT_VERSION = 11;
 let versionMismatchWarned = false;
 let GS_URL = DEFAULT_GS_URL;
 
@@ -1304,17 +1353,29 @@ function setAdminUI(on) {
   if (st) st.style.display = on ? '' : 'none';
   const gateStatus = document.getElementById('adminStatusGate');
   if (gateStatus) gateStatus.style.display = on ? 'inline' : 'none';
+  const fab = document.getElementById('adminFab');
+  if (fab) fab.style.display = on ? '' : 'none';
   const appStatus = document.getElementById('adminStatusApp');
   if (appStatus) appStatus.style.display = on ? 'inline' : 'none';
 }
 
 /** ॲडमिन पासवर्ड विचारून सर्व्हरकडे तपासते — बरोबर असल्यास सेटिंग्ज टॅब दिसू लागतो व
  * कोणत्याही गावाचा आराखडा (पासवर्डशिवाय) उघडता/बदलता येतो */
-async function adminLogin() {
-  if (isAdmin) { showToast('तुम्ही आधीच ॲडमिन म्हणून लॉगिन आहात'); return; }
-  const pwd = window.prompt('ॲडमिन पासवर्ड टाका:');
-  if (pwd === null) return;
-  if (!GS_URL) { showToast('आधी Google Sheet जोडणी आवश्यक आहे'); return; }
+let adminSheetUrl = '';
+async function adminLogin() { if (isAdmin) openAdminPanel(); else openAdminLogin(); }
+function openAdminLogin() {
+  document.getElementById('adminLoginErr').style.display = 'none';
+  document.getElementById('adminLoginScreen').style.display = 'flex';
+  setTimeout(() => { const e = document.getElementById('adminPwdInput'); if (e) e.focus(); }, 100);
+}
+function closeAdminLogin() { document.getElementById('adminLoginScreen').style.display = 'none'; }
+async function doAdminLogin() {
+  const pwd = document.getElementById('adminPwdInput').value;
+  const err = document.getElementById('adminLoginErr');
+  const fail = m => { err.textContent = m; err.style.display = 'block'; };
+  err.style.display = 'none';
+  if (!pwd) { fail('ॲडमिन पासवर्ड टाका'); return; }
+  if (!GS_URL) { fail('आधी Google Sheet जोडणी आवश्यक आहे'); return; }
   try {
     const res = await fetch(GS_URL, {
       method: 'POST',
@@ -1324,14 +1385,105 @@ async function adminLogin() {
     const data = await res.json();
     if (data.ok && data.isAdmin) {
       currentAdminPassword = pwd;
+      adminSheetUrl = data.sheetUrl || '';
+      document.getElementById('adminPwdInput').value = '';
+      closeAdminLogin();
       setAdminUI(true);
       ActivityLog.add('admin_login', 'ॲडमिन लॉगिन', null);
-      showToast('ॲडमिन लॉगिन यशस्वी ✓');
+      openAdminPanel();
+    } else if (data.ok && data.adminPasswordSet === false) {
+      fail('केंद्रीय Sheet मध्ये ॲडमिन पासवर्ड सेट केलेला नाही — "केंद्रीय-सेटअप" पानावर रांग ८ मध्ये B रकान्यात भरा');
     } else {
-      showToast('पासवर्ड चुकीचा आहे');
+      fail('पासवर्ड चुकीचा आहे (केंद्रीय-सेटअप पानावरील "ॲडमिन पासवर्ड" शीच जुळला पाहिजे)');
     }
-  } catch (e) { showToast('तपासणी अयशस्वी: ' + (e && e.message ? e.message : e)); }
+  } catch (e) { fail('तपासणी अयशस्वी: ' + (e && e.message ? e.message : e)); }
 }
+function adminLogout() {
+  currentAdminPassword = ''; adminSheetUrl = ''; setAdminUI(false); closeAdminPanel();
+  showToast('ॲडमिन लॉगआउट झाले');
+}
+function openAdminPanel() {
+  if (!isAdmin) { openAdminLogin(); return; }
+  const a = document.getElementById('adminSheetLink'), m = document.getElementById('adminSheetMissing');
+  if (adminSheetUrl) { a.href = adminSheetUrl; a.style.display = 'inline-block'; m.style.display = 'none'; }
+  else { a.style.display = 'none'; m.style.display = 'block'; }
+  renderAdminPdfList();
+  document.getElementById('adminPanel').style.display = 'flex';
+}
+function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
+async function adminPost_(body) {
+  const res = await fetch(GS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ adminPassword: currentAdminPassword }, body)) });
+  return await res.json();
+}
+let lastPdfDocs = [];
+function renderAdminPdfList() {
+  const box = document.getElementById('adminPdfList');
+  if (!box) return;
+  if (!lastPdfDocs.length) { box.innerHTML = '<p class="hint">सध्या यादीत काहीही नाही.</p>'; return; }
+  box.innerHTML = lastPdfDocs.map((d, i) => `
+    <div style="display:flex; gap:8px; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e5e7eb;">
+      <div style="min-width:0;"><b>${escapeHtml_(d.title)}</b>${d.desc ? '<br><span class="hint">' + escapeHtml_(d.desc) + '</span>' : ''}</div>
+      <button class="btn btn-ghost" style="width:auto; padding:6px 12px; flex:0 0 auto;" id="apDel${i}" onclick="adminPdfDelete(${i})">🗑 काढा</button>
+    </div>`).join('');
+}
+function apMsg_(okText, errText) {
+  const ok = document.getElementById('apOk'), er = document.getElementById('apErr');
+  ok.style.display = okText ? 'block' : 'none'; ok.textContent = okText || '';
+  er.style.display = errText ? 'block' : 'none'; er.textContent = errText || '';
+}
+async function adminPdfAdd() {
+  apMsg_('', '');
+  const title = document.getElementById('apTitle').value.trim();
+  const url = document.getElementById('apUrl').value.trim();
+  const desc = document.getElementById('apDesc').value.trim();
+  if (!title || !/^https?:\/\//i.test(url)) { apMsg_('', 'शीर्षक व https:// ने सुरू होणारी लिंक आवश्यक आहे.'); return; }
+  try {
+    const r = await adminPost_({ action: 'adminPdfAdd', title, url, desc });
+    if (!r.ok) { apMsg_('', r.error || 'जोडता आले नाही'); return; }
+    ['apTitle', 'apUrl', 'apDesc'].forEach(id => document.getElementById(id).value = '');
+    apMsg_('यादीत जोडले ✓', '');
+    ActivityLog.add('admin_pdf_add', 'माहिती यादीत जोडले: ' + title, null);
+    await refreshListsFromSheet(true); renderAdminPdfList();
+  } catch (e) { apMsg_('', 'जोडता आले नाही: ' + errText_(e)); }
+}
+async function adminPdfDelete(i) {
+  const d = lastPdfDocs[i]; if (!d) return;
+  const btn = document.getElementById('apDel' + i);
+  if (btn && btn.dataset.armed !== '1') {
+    btn.dataset.armed = '1'; btn.textContent = 'खात्री? पुन्हा दाबा';
+    setTimeout(() => { if (btn) { btn.dataset.armed = ''; btn.textContent = '🗑 काढा'; } }, 4000);
+    return;
+  }
+  try {
+    const r = await adminPost_({ action: 'adminPdfDelete', title: d.title, url: d.url });
+    if (!r.ok) { apMsg_('', r.error || 'काढता आले नाही'); return; }
+    apMsg_('यादीतून काढले ✓', '');
+    ActivityLog.add('admin_pdf_delete', 'माहिती यादीतून काढले: ' + d.title, null);
+    await refreshListsFromSheet(true); renderAdminPdfList();
+  } catch (e) { apMsg_('', 'काढता आले नाही: ' + errText_(e)); }
+}
+async function adminPanelResetPwd() {
+  const okEl = document.getElementById('apRstOk'), errEl = document.getElementById('apRstErr');
+  okEl.style.display = 'none'; errEl.style.display = 'none';
+  const jilha = document.getElementById('apJilha').value.trim(), taluka = document.getElementById('apTaluka').value.trim();
+  const gav = document.getElementById('apGav').value.trim(), newPassword = document.getElementById('apNewPwd').value.trim();
+  if (!jilha || !taluka || !gav || !newPassword) { errEl.textContent = 'सर्व माहिती भरा.'; errEl.style.display = 'block'; return; }
+  try {
+    const r = await adminPost_({ action: 'adminResetVillagePassword', village: { jilha, taluka, gav }, newPassword });
+    if (r.ok) { okEl.style.display = 'block'; document.getElementById('apNewPwd').value = ''; ActivityLog.add('password_reset', 'गावाचा पासवर्ड रिसेट केला', { jilha, taluka, gav }); }
+    else { errEl.textContent = r.error || 'रिसेट अयशस्वी'; errEl.style.display = 'block'; }
+  } catch (e) { errEl.textContent = 'रिसेट अयशस्वी: ' + errText_(e); errEl.style.display = 'block'; }
+}
+// लोगो / अ‍ॅपचे शीर्षक ७ वेळा (५ सेकंदांत) दाबल्यावर ॲडमिन लॉगिन पान उघडते
+let _logoTaps = [];
+function logoTap() {
+  const now = Date.now();
+  _logoTaps = _logoTaps.filter(t => now - t < 5000); _logoTaps.push(now);
+  if (_logoTaps.length >= 7) { _logoTaps = []; adminLogin(); }
+}
+['gateLogoWrap', 'gateBrand', 'loginBrand'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('click', logoTap); });
+(function () { const br = document.querySelector('.topbar .brandrow'); if (br) br.addEventListener('click', logoTap); })();
 
 /** गेटवर "निश्चित करा" दाबल्यावर — या गावाचा आराखडा बदलण्याची परवानगी आहे का ते सर्व्हरकडे तपासते.
  * ॲडमिन लॉगिन असल्यास पासवर्डशिवायही परवानगी मिळते. नवीन गावासाठी दिलेला पासवर्ड कायमचा साठवला जातो. */
@@ -2229,16 +2381,21 @@ async function refreshListsFromSheet(force) {
 /** "माहिती" टॅबमध्ये उपलब्ध PDF दुव्यांची यादी दाखवते — प्रत्येक दुवा नवीन टॅबमध्ये उघडतो,
  * तिथून वापरकर्ता तो पाहू व (Drive/PDF व्ह्यूअरमधील प्रिंट बटणाने) प्रिंट करू शकतो */
 function renderPdfInfoList(pdfDocs) {
+  lastPdfDocs = pdfDocs.slice();
+  const gw = document.getElementById('gateInfoWrap'), ga = document.getElementById('gatePdfArea');
   const area = document.getElementById('pdfInfoArea');
   if (!area) return;
-  if (!pdfDocs.length) { area.innerHTML = '<p class="hint">सध्या इथे कोणतेही PDF उपलब्ध नाहीत.</p>'; return; }
-  area.innerHTML = pdfDocs.map(d => `
+  if (!pdfDocs.length) { area.innerHTML = '<p class="hint">सध्या इथे कोणतेही PDF उपलब्ध नाहीत.</p>'; if (gw) gw.style.display = 'none'; return; }
+  const html = pdfDocs.map(d => `
     <div class="card" style="margin-bottom:10px;">
       <h3 style="margin:0 0 4px;">${escapeHtml_(d.title)}</h3>
       ${d.desc ? `<p class="sub" style="margin:0 0 8px;">${escapeHtml_(d.desc)}</p>` : ''}
       <a class="btn btn-secondary" style="display:inline-block; text-decoration:none;" href="${escapeAttr_(d.url)}" target="_blank" rel="noopener">उघडा / पहा / प्रिंट करा</a>
     </div>
   `).join('');
+  area.innerHTML = html;
+  if (ga) { ga.innerHTML = html; gw.style.display = ''; }
+  if (typeof renderAdminPdfList === 'function') renderAdminPdfList();
 }
 function escapeHtml_(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function escapeAttr_(s) { return escapeHtml_(s); }
