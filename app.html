@@ -162,10 +162,6 @@
 </head>
 <body>
 
-<div id="versionBanner" style="display:none; position:sticky; top:0; z-index:999; background:#dc2626; color:#fff; padding:12px 16px; font-size:13.5px; font-weight:700; text-align:center; line-height:1.5;">
-  ⚠️ Google Sheet जुन्या कोडवर चालत आहे — नवीन बदल दिसणार नाहीत!<br>
-  <span style="font-weight:500; font-size:12.5px;">उपाय: Apps Script मध्ये जा → Deploy → Manage deployments → ✏️ (Edit) → Version: "New version" निवडा → Deploy दाबा.</span>
-</div>
 
 <!-- ===================== (v9) Google लॉगिन ===================== -->
 <div class="gate" id="loginScreen" style="display:none; position:fixed; inset:0; z-index:1500; background:var(--paper); overflow:auto;">
@@ -494,7 +490,8 @@
       <h3 style="margin:0 0 6px;">"माहिती" (PDF) यादी</h3>
       <div id="adminPdfList"></div>
       <div class="field"><label>शीर्षक</label><input type="text" id="apTitle" placeholder="उदा. अ‍ॅप कसे वापरावे"></div>
-      <div class="field"><label>PDF / Drive लिंक (https://...)</label><input type="text" id="apUrl" placeholder="https://drive.google.com/..."></div>
+      <div class="field"><label>PDF फाईल निवडा (थेट अपलोड, कमाल ५ MB)</label><input type="file" id="apFile" accept="application/pdf,.pdf"></div>
+      <div class="field"><label>किंवा PDF / Drive लिंक (https://...)</label><input type="text" id="apUrl" placeholder="https://drive.google.com/..."></div>
       <div class="field"><label>थोडक्यात वर्णन (ऐच्छिक)</label><input type="text" id="apDesc"></div>
       <button class="btn btn-primary" onclick="adminPdfAdd()">➕ यादीत जोडा</button>
       <p class="ok" id="apOk" style="display:none"></p><p class="err" id="apErr" style="display:none"></p>
@@ -1227,7 +1224,7 @@ async function signOutUser() {
 const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbzQfVP5eEpWuaVG319XbzKv-uVvWQycoVMDujZ778AbPMP6oq6dZM3fk1fyx9IDVcys/exec';
 // GS फाईलमधल्या SCRIPT_VERSION शी जुळणारा आकडा — जुळत नसेल तर विकसकाने कोड बदलल्यानंतर
 // "Deploy → Manage deployments → New version → Deploy" द्यायचं राहिलं आहे असं समजायचं
-const EXPECTED_SCRIPT_VERSION = 11;
+const EXPECTED_SCRIPT_VERSION = 12;
 let versionMismatchWarned = false;
 let GS_URL = DEFAULT_GS_URL;
 
@@ -1437,11 +1434,21 @@ async function adminPdfAdd() {
   const title = document.getElementById('apTitle').value.trim();
   const url = document.getElementById('apUrl').value.trim();
   const desc = document.getElementById('apDesc').value.trim();
-  if (!title || !/^https?:\/\//i.test(url)) { apMsg_('', 'शीर्षक व https:// ने सुरू होणारी लिंक आवश्यक आहे.'); return; }
+  const f = document.getElementById('apFile').files[0];
+  if (!title) { apMsg_('', 'शीर्षक आवश्यक आहे.'); return; }
+  if (!f && !/^https?:\/\//i.test(url)) { apMsg_('', 'PDF फाईल निवडा किंवा https:// ने सुरू होणारी लिंक टाका.'); return; }
+  if (f && f.size > 5 * 1024 * 1024) { apMsg_('', 'फाईल ५ MB पेक्षा मोठी आहे. लहान PDF निवडा किंवा Drive लिंक वापरा.'); return; }
   try {
-    const r = await adminPost_({ action: 'adminPdfAdd', title, url, desc });
+    let r;
+    if (f) {
+      apMsg_('PDF अपलोड होत आहे... थांबा', '');
+      const b64 = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.onerror = () => rej(new Error('फाईल वाचता आली नाही')); fr.readAsDataURL(f); });
+      r = await adminPost_({ action: 'adminPdfUpload', title, desc, fileName: f.name, data: b64 });
+    } else {
+      r = await adminPost_({ action: 'adminPdfAdd', title, url, desc });
+    }
     if (!r.ok) { apMsg_('', r.error || 'जोडता आले नाही'); return; }
-    ['apTitle', 'apUrl', 'apDesc'].forEach(id => document.getElementById(id).value = '');
+    ['apTitle', 'apUrl', 'apDesc', 'apFile'].forEach(id => document.getElementById(id).value = '');
     apMsg_('यादीत जोडले ✓', '');
     ActivityLog.add('admin_pdf_add', 'माहिती यादीत जोडले: ' + title, null);
     await refreshListsFromSheet(true); renderAdminPdfList();
@@ -2317,6 +2324,7 @@ async function pushMetaToSheet() {
 }
 /** Google Sheet वर चालणारा कोड जुना (न-अद्ययावत) आहे का हे तपासून वरती लाल पट्टी दाखवते */
 function checkScriptVersion(data) {
+  return; // (v9.4) जुन्या कोडची लाल पट्टी कायमची काढली
   const banner = document.getElementById('versionBanner');
   if (!banner) return;
   if (data && typeof data.scriptVersion === 'number') {
