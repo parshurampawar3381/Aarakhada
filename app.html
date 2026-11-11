@@ -481,6 +481,11 @@
   <div class="gatecard" style="max-width:640px;">
     <h2>⚙ ॲडमिन पॅनेल <span style="font-size:12px; color:#14532d;">✓ लॉगिन आहे</span></h2>
     <div class="card" style="margin-bottom:12px;">
+      <h3 style="margin:0 0 6px;">📊 अ‍ॅप वापर</h3>
+      <div id="adminStatsBox"><p class="hint">माहिती घेत आहे...</p></div>
+      <button class="btn btn-ghost" style="width:auto; padding:6px 14px; margin-top:6px;" onclick="loadAdminStats()">🔄 पुन्हा तपासा</button>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
       <h3 style="margin:0 0 6px;">मुख्य Google Sheet</h3>
       <p class="sub">कामांची यादी (Data-सूची), दर, योजनेचे नाव, गावांची यादी, पासवर्ड, लॉग हे सर्व इथे पाहता व बदलता येते. बदल सर्व वापरकर्त्यांना ≤ ३० मिनिटांत आपोआप दिसतात.</p>
       <a id="adminSheetLink" class="btn btn-secondary" style="display:inline-block; text-decoration:none;" href="#" target="_blank" rel="noopener">📄 मुख्य Sheet उघडा / बदल करा</a>
@@ -1224,7 +1229,7 @@ async function signOutUser() {
 const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbzQfVP5eEpWuaVG319XbzKv-uVvWQycoVMDujZ778AbPMP6oq6dZM3fk1fyx9IDVcys/exec';
 // GS फाईलमधल्या SCRIPT_VERSION शी जुळणारा आकडा — जुळत नसेल तर विकसकाने कोड बदलल्यानंतर
 // "Deploy → Manage deployments → New version → Deploy" द्यायचं राहिलं आहे असं समजायचं
-const EXPECTED_SCRIPT_VERSION = 12;
+const EXPECTED_SCRIPT_VERSION = 13;
 let versionMismatchWarned = false;
 let GS_URL = DEFAULT_GS_URL;
 
@@ -1406,12 +1411,34 @@ function openAdminPanel() {
   else { a.style.display = 'none'; m.style.display = 'block'; }
   renderAdminPdfList();
   document.getElementById('adminPanel').style.display = 'flex';
+  loadAdminStats();
 }
 function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
 async function adminPost_(body) {
   const res = await fetch(GS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(Object.assign({ adminPassword: currentAdminPassword }, body)) });
   return await res.json();
+}
+async function loadAdminStats() {
+  const box = document.getElementById('adminStatsBox');
+  if (!box) return;
+  box.innerHTML = '<p class="hint">माहिती घेत आहे...</p>';
+  try {
+    const r = await adminPost_({ action: 'adminStats' });
+    if (!r.ok) { box.innerHTML = '<p class="err" style="display:block">' + escapeHtml_(r.error || 'माहिती मिळाली नाही — Apps Script चा नवीन कोड Deploy करा') + '</p>'; return; }
+    const cell = (n, l, c) => `<div style="flex:1 1 44%; background:${c}; border-radius:12px; padding:10px 12px;"><div style="font-size:24px; font-weight:700;">${n}</div><div class="hint" style="margin:0;">${l}</div></div>`;
+    box.innerHTML = `<div style="display:flex; flex-wrap:wrap; gap:8px;">
+      ${cell(r.devices, 'अ‍ॅप वापरलेली डिव्हाइसेस (इन्स्टॉल)', '#f0fdf4')}
+      ${cell(r.gmails, 'वेगवेगळे Gmail वापरकर्ते', '#eff6ff')}
+      ${cell(r.apk, 'मोबाईल अ‍ॅप (APK)', '#fffbeb')}
+      ${cell(r.web, 'PC / ब्राउझर', '#faf5ff')}
+      ${cell(r.active1, 'आज सक्रिय', '#f0fdfa')}
+      ${cell(r.active7, 'गेल्या ७ दिवसांत', '#fef2f2')}
+      ${cell(r.active30, 'गेल्या ३० दिवसांत', '#f5f5f0')}
+      ${cell(r.villages, 'वापरात आलेल्या ग्रामपंचायती', '#ecfeff')}
+    </div>
+    <p class="hint" style="margin-top:8px;">मोजणी नवीन अ‍ॅपने लॉगिन केल्यापासून सुरू होते. डिव्हाइसची संख्या म्हणजे अ‍ॅप चालवलेल्या फोन/ब्राउझरची संख्या; अनइन्स्टॉल कळत नाही, आणि अ‍ॅपचा डेटा साफ केल्यास नवीन इन्स्टॉल म्हणून मोजले जाते. तपशील: मुख्य Sheet चे "डिव्हाइस-यादी" पान.</p>`;
+  } catch (e) { box.innerHTML = '<p class="err" style="display:block">माहिती मिळाली नाही: ' + escapeHtml_(errText_(e)) + '</p>'; }
 }
 let lastPdfDocs = [];
 function renderAdminPdfList() {
@@ -2241,12 +2268,17 @@ function currentVillageKey() {
 // व "गाव-वापरकर्ते" पाने) जमा होते. सर्व्हरला कमी कॉल जावेत म्हणून नोंदी गोळा करून एकत्र पाठवल्या जातात.
 const ActivityLog = {
   _q: [], _timer: null, _busy: false, _KEY: 'act_queue_v1',
+  // या डिव्हाइसची/इन्स्टॉलची ओळख (यादृच्छिक, कोणतीही वैयक्तिक माहिती नाही) — किती जणांनी अ‍ॅप वापरले ते मोजण्यासाठी
+  devId() {
+    try { let d = localStorage.getItem('dev_id_v1'); if (!d) { d = 'd' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); localStorage.setItem('dev_id_v1', d); } return d; }
+    catch (e) { return 'unknown'; }
+  },
   _load() { try { const r = localStorage.getItem(this._KEY); if (r) this._q = JSON.parse(r) || []; } catch (e) {} },
   _save() { try { localStorage.setItem(this._KEY, JSON.stringify(this._q.slice(-300))); } catch (e) {} },
   add(action, detail, village) {
     try {
       const v = village === null ? {} : (village || { jilha: currentJilha, taluka: currentTaluka, gav: currentGP });
-      this._q.push({ t: Date.now(), email: (Auth.getEmail && Auth.getEmail()) || '', jilha: v.jilha || '', taluka: v.taluka || '',
+      this._q.push({ t: Date.now(), dev: ActivityLog.devId(), plat: (window.AndroidBridge ? 'APK' : 'वेब'), email: (Auth.getEmail && Auth.getEmail()) || '', jilha: v.jilha || '', taluka: v.taluka || '',
         gav: v.gav || '', action, detail: (detail || '') + (typeof isAdmin !== 'undefined' && isAdmin ? ' [ॲडमिन]' : '') });
       this._save();
       clearTimeout(this._timer);
